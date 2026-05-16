@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms & Conditions | Terminal 8 Gaming Cafe</title>
+  <meta name="description" content="Terms and conditions for Terminal 8 Gaming Cafe. Read our rules and regulations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="main-style.css?v=2" />
+  <style>
+    .terms-section {
+      padding: 120px 0 80px;
+      min-height: 80vh;
+    }
+    .terms-content {
+      background: rgba(15, 16, 38, 0.8);
+      border: 1px solid var(--neon-blue);
+      border-radius: var(--border-radius);
+      padding: 40px;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+      margin-top: 30px;
+    }
+    .terms-content h3 {
+      color: var(--neon-pink);
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    .terms-content h4 {
+      color: var(--neon-yellow);
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    .terms-content p {
+      margin-bottom: 15px;
+      color: var(--text-muted);
+    }
+    .terms-content ul {
+      list-style-type: square;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      color: var(--text-muted);
+    }
+    .terms-content li {
+      margin-bottom: 10px;
+    }
+    .terms-content strong {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-inner">
+      <div class="loader-logo">TERMINAL<span>8</span></div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+      <div class="loader-status" id="loaderStatus">LOADING...</div>
+      <div class="loader-pixels">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCANLINES OVERLAY -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- FLOATING PIXELS -->
+  <div class="pixel-rain" id="pixelRain" aria-hidden="true"></div>
+
+  <!-- ========== NAV ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <a href="index.html">
+        <img src="logo.png" alt="Terminal 8 Gaming Cafe Logo" class="logo-img" />
+      </a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#stations" class="nav-link">Stations</a></li>
+      <li><a href="index.html#food" class="nav-link">Cafe</a></li>
+      <li><a href="index.html#pricing" class="nav-link">Pricing</a></li>
+      <li><a href="index.html#offers" class="nav-link">Offers</a></li>
+      <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== TERMS CONTENT ========== -->
+  <section class="section terms-section" id="terms">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// RULES & REGS //</div>
+        <h2 class="section-title">TERMS & <span class="neon-text">CONDITIONS</span></h2>
+        <p class="section-sub">Please read the rules of the game carefully before plugging in.</p>
+      </div>
+
+      <div class="terms-content reveal">
+        <h3>1. General Rules</h3>
+        <p>By entering Terminal 8 Gaming Cafe, you agree to abide by the following rules:</p>
+        <ul>
+          <li>No outside food or drinks are allowed on the premises.</li>
+          <li>Treat all gaming equipment (consoles, controllers, steering wheels, pool cues) with respect. Any deliberate damage will be charged to the user.</li>
+          <li>Keep noise levels reasonable. Friendly banter is welcome, but excessive shouting or abusive language will not be tolerated.</li>
+          <li>Management reserves the right to refuse service to anyone violating the rules.</li>
+        </ul>
+
+        <h3>2. Booking & Cancellation</h3>
+        <ul>
+          <li>Bookings can be made online or on-site. Priority seating is given to pre-booked slots and members according to their tier.</li>
+          <li>Please arrive 10 minutes before your booked slot. If you are late by more than 15 minutes without notifying us, your slot may be given to waiting players.</li>
+          <li>Cancellations must be made at least 2 hours in advance.</li>
+        </ul>
+
+        <h3>3. Memberships & T8 Coins</h3>
+        <p>Terminal 8 offers tiered monthly memberships (Silver, Gold, Platinum). Each membership runs for 30 days from the date of activation. Memberships provide you with <strong>T8 Coins</strong> which can be used to book different stations flexibly.</p>
+        
+        <h4>3.1 T8 Coins System & Station Split</h4>
+        <p>Instead of fixed hours for a single station, memberships grant you T8 Coins. You can mix and match your playtime across different stations:</p>
+        <ul>
+          <li><strong>PS5 Individual Station:</strong> 2 T8 Coins / Hour</li>
+          <li><strong>Car Simulator:</strong> 4 T8 Coins / Hour</li>
+          <li><strong>Group Lounge:</strong> 6 T8 Coins / Hour</li>
+          <li><strong>Billiards:</strong> 6 T8 Coins / Hour</li>
+        </ul>
+        <p>Based on this, here is how you can use your membership:</p>
+        <ul>
+          <li><strong>Silver (30 T8 Coins):</strong> Up to 15 hours of Individual Gaming OR 5 hours of Lounge OR ~7 hours of Car Simulator OR 5 hours of Billiards, or any combination.</li>
+          <li><strong>Gold (80 T8 Coins):</strong> Up to 40 hours of Individual Gaming OR ~13 hours of Lounge OR 20 hours of Car Simulator OR ~13 hours of Billiards, or any combination.</li>
+          <li><strong>Platinum (200 T8 Coins):</strong> Up to 100 hours of Individual Gaming OR ~33 hours of Lounge OR 50 hours of Car Simulator OR ~33 hours of Billiards, or any combination.</li>
+        </ul>
+
+        <h4>3.2 T8 Coins Conditions of Use</h4>
+        <ul>
+          <li><strong>Non-Transferable:</strong> Memberships and T8 Coins are strictly non-transferable and can only be used by the registered member. Sharing your account will result in immediate termination without a refund.</li>
+          <li><strong>Rollover:</strong> Unused T8 Coins roll over to the next month <strong>only if</strong> the membership is renewed before expiration. Otherwise, they expire.</li>
+          <li><strong>Unlimited Perks:</strong> Platinum unlimited off-peak gaming does not deduct from your T8 Coins balance.</li>
+        </ul>
+
+        <h4>3.3 Priority Booking Rules</h4>
+        <ul>
+          <li><strong>Silver (Basic Priority):</strong> Can book slots up to 3 days in advance.</li>
+          <li><strong>Gold (Priority Booking):</strong> Can book slots up to 7 days in advance. Dedicated stations are held for Gold members until 2 hours prior to the slot.</li>
+          <li><strong>Platinum (VIP Priority):</strong> Immediate queue jumping for walk-ins if a non-reserved station is available. Can book slots up to 14 days in advance and reserve specific preferred stations.</li>
+        </ul>
+
+        <h4>3.4 Additional Perks</h4>
+        <ul>
+          <li><strong>Guest Passes:</strong> Platinum members receive 2 free guest passes per month. Each pass allows one friend to play alongside you for up to 2 hours for free.</li>
+          <li><strong>Tournament Entries:</strong> Gold members get 1 free entry per month. Platinum members get free entry to all standard tournaments.</li>
+        </ul>
+
+        <h4>3.5 Discounts</h4>
+        <p>Snack discounts (5%, 10%, 20%) apply to all items in the Cafe Corner for the member only. It cannot be applied to purchases made for large groups.</p>
+
+        <h3>4. Group Lounge & Billiards</h3>
+        <ul>
+          <li>The Group Lounge is designed for 4-6 players. The hourly rate is fixed regardless of whether 4, 5, or 6 people are playing.</li>
+          <li>Billiards room is private. Misuse of the slate table (e.g., sitting on the table, spilling drinks, tearing the cloth) will result in immediate termination of the session and a damage fee.</li>
+        </ul>
+        
+        <h3>5. Liability</h3>
+        <p>Terminal 8 Gaming Cafe is not responsible for any lost, stolen, or damaged personal belongings. Please keep an eye on your valuables.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-scanline"></div>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Terminal 8" class="footer-logo" />
+          <p>Where pixels meet passion. The ultimate retro gaming cafe for every kind of player.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+            <a href="#" class="social-btn" aria-label="Facebook">💬</a>
+            <a href="#" class="social-btn" aria-label="YouTube">▶️</a>
+          </div>
+        </div>
+        <div class="footer-links-col">
+          <h5>QUICK LINKS</h5>
+          <ul>
+            <li><a href="index.html#stations">Stations</a></li>
+            <li><a href="index.html#food">Cafe Corner</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="index.html#offers">Offers</a></li>
+            <li><a href="index.html#book">Book Now</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-hours">
+          <h5>OPEN HOURS</h5>
+          <ul>
+            <li><span>Mon – Fri</span><span>11 AM – 10 PM</span></li>
+            <li><span>Saturday</span><span>10 AM – 11 PM</span></li>
+            <li><span>Sunday</span><span>10 AM – 11 PM</span></li>
+          </ul>
+          <div class="footer-contact">
+            <p>📍 Near Poly Junction, Thrippyar – 680567</p>
+            <p>📞 9846302111</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="currentYear">2026</span> Terminal 8 Gaming Cafe. All Rights Reserved.</p>
+        <p class="footer-pixel">MADE WITH ❤️ + ☕ + 🎮</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main-script.js"></script>
+</body>
+</html>

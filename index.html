@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal 8 Gaming Cafe | Retro Gaming Hub</title>
+  <meta name="description" content="Terminal 8 Gaming Cafe — The ultimate retro gaming hub. PS5 stations, car simulator, billiards, soft-serve ice cream and more. Book your station now!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="main-style.css?v=2" />
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-inner">
+      <div class="loader-logo">TERMINAL<span>8</span></div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+      <div class="loader-status" id="loaderStatus">LOADING...</div>
+      <div class="loader-pixels">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCANLINES OVERLAY -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- FLOATING PIXELS -->
+  <div class="pixel-rain" id="pixelRain" aria-hidden="true"></div>
+
+  <!-- ========== NAV ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="logo.png" alt="Terminal 8 Gaming Cafe Logo" class="logo-img" />
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" class="nav-link">Home</a></li>
+      <li><a href="#stations" class="nav-link">Stations</a></li>
+      <li><a href="#food" class="nav-link">Cafe</a></li>
+      <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      <li><a href="#offers" class="nav-link">Offers</a></li>
+      <li><a href="#book" class="nav-link nav-cta">Book Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="pixel-badge reveal">INSERT COIN TO PLAY</div>
+      <img src="logo.png" alt="Terminal 8 Gaming Cafe" class="hero-logo reveal" />
+      <p class="hero-tagline reveal">Your <span class="neon-text">Ultimate</span> Retro Gaming Destination</p>
+      <p class="hero-sub reveal">PS5 · Car Sim · Billiards · Soft Serve · Cup Noodles</p>
+      <div class="hero-btns reveal">
+        <a href="#stations" class="btn btn-primary">
+          <span class="btn-pixel"></span>EXPLORE STATIONS
+        </a>
+        <a href="#book" class="btn btn-secondary">
+          <span class="btn-pixel"></span>BOOK NOW ▶
+        </a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="stat">
+          <span class="stat-num" data-count="6">0</span>
+          <span class="stat-label">Gaming Stations</span>
+        </div>
+        <div class="stat-divider">|</div>
+        <div class="stat">
+          <span class="stat-num" data-count="100">0</span><span class="stat-suffix">%</span>
+          <span class="stat-label">Fun Guaranteed</span>
+        </div>
+        <div class="stat-divider">|</div>
+        <div class="stat">
+          <span class="stat-num" data-count="1">0</span>
+          <span class="stat-label">Epic Venue</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>SCROLL DOWN</span>
+      <div class="scroll-arrow">▼</div>
+    </div>
+  </section>
+
+  <!-- ========== TICKER ========== -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>🎮 PS5 INDIVIDUAL ₹150/HR</span>
+      <span>👥 GROUP LOUNGE ₹300/HR</span>
+      <span>🏎️ CAR SIMULATOR ₹250/HR</span>
+      <span>🎱 BILLIARDS ₹300/HR</span>
+      <span>🍦 SOFT SERVE ICE CREAM</span>
+      <span>🍜 CUP NOODLES</span>
+      <span>🎮 PS5 INDIVIDUAL ₹150/HR</span>
+      <span>👥 GROUP LOUNGE ₹300/HR</span>
+      <span>🏎️ CAR SIMULATOR ₹250/HR</span>
+      <span>🎱 BILLIARDS ₹300/HR</span>
+      <span>🍦 SOFT SERVE ICE CREAM</span>
+      <span>🍜 CUP NOODLES</span>
+    </div>
+  </div>
+
+  <!-- ========== STATIONS ========== -->
+  <section class="section stations" id="stations">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// SELECT YOUR STATION //</div>
+        <h2 class="section-title">GAMING <span class="neon-text">STATIONS</span></h2>
+        <p class="section-sub">Choose your battleground. Every station is fully equipped for maximum immersion.</p>
+      </div>
+
+      <div class="stations-grid">
+
+        <!-- PS5 INDIVIDUAL -->
+        <div class="station-card reveal" id="station-ps5">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-header">
+            <div class="station-icon">🎮</div>
+            <div class="station-badge">3 AVAILABLE</div>
+          </div>
+          <h3 class="card-title">PS5 INDIVIDUAL</h3>
+          <p class="card-desc">Dive solo into the latest PlayStation 5 titles. 4K OLED display, DualSense haptic controllers, immersive surround sound — built for the lone wolf gamer.</p>
+          <ul class="card-features">
+            <li><span class="feat-icon">▶</span> PS5 Console</li>
+            <li><span class="feat-icon">▶</span> 4K OLED Display</li>
+            <li><span class="feat-icon">▶</span> DualSense Controller</li>
+            <li><span class="feat-icon">▶</span> Headphone Jack</li>
+            <li><span class="feat-icon">▶</span> All Latest Titles</li>
+          </ul>
+          <div class="card-footer">
+            <div class="card-price">₹150<span>/hr</span></div>
+            <a href="#book" class="btn-card">BOOK →</a>
+          </div>
+        </div>
+
+        <!-- PS5 GROUP LOUNGE -->
+        <div class="station-card featured reveal" id="station-group">
+          <div class="card-glow glow-orange"></div>
+          <div class="popular-pill">⚡ MOST POPULAR</div>
+          <div class="card-header">
+            <div class="station-icon">👥</div>
+            <div class="station-badge">1 LOUNGE</div>
+          </div>
+          <h3 class="card-title">GROUP LOUNGE</h3>
+          <p class="card-desc">Squad up! Our group station fits 4–6 players with a massive screen setup. Perfect for tournaments, birthday parties, and epic group battles.</p>
+          <ul class="card-features">
+            <li><span class="feat-icon">▶</span> Seats 4–6 Players</li>
+            <li><span class="feat-icon">▶</span> Giant Screen Setup</li>
+            <li><span class="feat-icon">▶</span> Multiple Controllers</li>
+            <li><span class="feat-icon">▶</span> Party Lighting</li>
+            <li><span class="feat-icon">▶</span> Private Zone</li>
+          </ul>
+          <div class="card-footer">
+            <div class="card-price">₹300<span>/hr</span></div>
+            <a href="#book" class="btn-card">BOOK →</a>
+          </div>
+        </div>
+
+        <!-- CAR SIMULATOR -->
+        <div class="station-card reveal" id="station-carsim">
+          <div class="card-glow glow-green"></div>
+          <div class="card-header">
+            <div class="station-icon">🏎️</div>
+            <div class="station-badge">1 RIG</div>
+          </div>
+          <h3 class="card-title">CAR SIMULATOR</h3>
+          <p class="card-desc">Strap in and feel the speed. Our dedicated racing rig has a professional wheel, pedals, and force feedback — as close to the real track as it gets.</p>
+          <ul class="card-features">
+            <li><span class="feat-icon">▶</span> Racing Wheel & Pedals</li>
+            <li><span class="feat-icon">▶</span> Force Feedback</li>
+            <li><span class="feat-icon">▶</span> Cockpit Rig</li>
+            <li><span class="feat-icon">▶</span> Multiple Racing Titles</li>
+            <li><span class="feat-icon">▶</span> Multi-Session Support</li>
+          </ul>
+          <div class="card-footer">
+            <div class="card-price">₹250<span>/hr</span></div>
+            <a href="#book" class="btn-card">BOOK →</a>
+          </div>
+        </div>
+
+        <!-- BILLIARDS -->
+        <div class="station-card reveal" id="station-billiards">
+          <div class="card-glow glow-purple"></div>
+          <div class="card-header">
+            <div class="station-icon">🎱</div>
+            <div class="station-badge">PRIVATE ROOM</div>
+          </div>
+          <h3 class="card-title">BILLIARDS</h3>
+          <p class="card-desc">Step into the private billiards room. A full-size slate table with premium cues, ambient lighting, and your own private space to rack up and play.</p>
+          <ul class="card-features">
+            <li><span class="feat-icon">▶</span> Full Slate Table</li>
+            <li><span class="feat-icon">▶</span> Premium Cue Set</li>
+            <li><span class="feat-icon">▶</span> Private Room</li>
+            <li><span class="feat-icon">▶</span> Ambient Lighting</li>
+            <li><span class="feat-icon">▶</span> 8-Ball & Snooker</li>
+          </ul>
+          <div class="card-footer">
+            <div class="card-price">₹300<span>/hr</span></div>
+            <a href="#book" class="btn-card">BOOK →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOD / CAFE ========== -->
+  <section class="section food-section" id="food">
+    <div class="food-bg-overlay"></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// POWER UP //</div>
+        <h2 class="section-title">CAFE <span class="neon-text">CORNER</span></h2>
+        <p class="section-sub">Fuel up between rounds. We keep the energy high.</p>
+      </div>
+      <div class="food-grid">
+        <div class="food-card reveal">
+          <div class="food-icon-wrap">
+            <span class="food-emoji">🍦</span>
+            <div class="food-pulse"></div>
+          </div>
+          <h3>SOFT SERVE</h3>
+          <p>Creamy, dreamy soft-press ice cream to keep you cool during the heat of battle. Classic vanilla, chocolate, and seasonal flavours.</p>
+          <div class="food-tag">ICE COLD</div>
+        </div>
+        <div class="food-card reveal">
+          <div class="food-icon-wrap">
+            <span class="food-emoji">🍜</span>
+            <div class="food-pulse"></div>
+          </div>
+          <h3>CUP NOODLES</h3>
+          <p>The legendary gamer fuel. Hot, slurpy cup noodles in multiple flavours — the perfect companion for a long gaming session.</p>
+          <div class="food-tag">HOT & READY</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MEMBERSHIP ========== -->
+  <section class="section membership-section" id="pricing">
+    <div class="membership-bg-anim" aria-hidden="true">
+      <div class="mem-orb mem-orb-1"></div>
+      <div class="mem-orb mem-orb-2"></div>
+      <div class="mem-orb mem-orb-3"></div>
+      <div class="mem-scanline"></div>
+    </div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// UNLOCK YOUR TIER //</div>
+        <h2 class="section-title">MEMBERSHIP <span class="neon-text">PLANS</span></h2>
+        <p class="section-sub">Choose your level. The higher your tier, the bigger the rewards.</p>
+        <div class="mem-pixel-bar reveal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+
+      <div class="membership-grid">
+
+        <!-- SILVER -->
+        <div class="mem-card mem-silver reveal">
+          <div class="mem-card-bg"></div>
+          <div class="mem-tier-badge">🥈 SILVER</div>
+          <div class="mem-card-header">
+            <div class="mem-icon">🎮</div>
+            <div class="mem-tag">ENTRY PLAN</div>
+          </div>
+          <div class="mem-price-wrap">
+            <span class="mem-price">₹999</span>
+            <span class="mem-price-period">/month</span>
+          </div>
+          <div class="mem-hours"><span class="mem-hours-num">30</span> T8 COINS</div>
+          <div style="text-align:center; color: var(--neon-blue); font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;">(~15 Hours Included)</div>
+          <div class="mem-divider"></div>
+          <ul class="mem-perks">
+            <li>
+              <div style="margin-bottom: 5px;"><span class="perk-dot"></span> <strong>Play Options:</strong></div>
+              <div class="mem-play-split">
+                <span class="split-item">🎮 15 Hrs PS5</span> <span class="split-or">OR</span>
+                <span class="split-item">👥 5 Hrs Lounge</span> <span class="split-or">OR</span>
+                <span class="split-item">🏎️ 7 Hrs Sim</span> <span class="split-or">OR</span>
+                <span class="split-item">🎱 5 Hrs Billiards</span>
+              </div>
+            </li>
+            <li><span class="perk-dot"></span> Mix and match stations anytime</li>
+            <li><span class="perk-dot"></span> Priority booking (basic)</li>
+          </ul>
+          <div class="mem-footer-label">Best for beginners &amp; casuals</div>
+          <a href="#book?type=membership&tier=silver" class="mem-cta">GET STARTED →</a>
+          <div class="mem-glow-edge"></div>
+        </div>
+
+        <!-- GOLD -->
+        <div class="mem-card mem-gold featured-mem reveal">
+          <div class="mem-card-bg"></div>
+          <div class="mem-popular-pill">⭐ MOST POPULAR</div>
+          <div class="mem-tier-badge">🥇 GOLD</div>
+          <div class="mem-card-header">
+            <div class="mem-icon">🕹️</div>
+            <div class="mem-tag">PROFIT ENGINE</div>
+          </div>
+          <div class="mem-price-wrap">
+            <span class="mem-price">₹2,499</span>
+            <span class="mem-price-period">/month</span>
+          </div>
+          <div class="mem-hours"><span class="mem-hours-num">80</span> T8 COINS</div>
+          <div style="text-align:center; color: var(--neon-blue); font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;">(~40 Hours Included)</div>
+          <div class="mem-divider"></div>
+          <ul class="mem-perks">
+            <li>
+              <div style="margin-bottom: 5px;"><span class="perk-dot"></span> <strong>Play Options:</strong></div>
+              <div class="mem-play-split">
+                <span class="split-item">🎮 40 Hrs PS5</span> <span class="split-or">OR</span>
+                <span class="split-item">👥 13 Hrs Lounge</span> <span class="split-or">OR</span>
+                <span class="split-item">🏎️ 20 Hrs Sim</span> <span class="split-or">OR</span>
+                <span class="split-item">🎱 13 Hrs Billiards</span>
+              </div>
+            </li>
+            <li><span class="perk-dot"></span> Priority Booking Access</li>
+            <li><span class="perk-dot"></span> Peak hour access included</li>
+            <li><span class="perk-dot"></span> 1 free tournament entry/month</li>
+          </ul>
+          <div class="mem-footer-label">Best for regular gamers</div>
+          <a href="#book?type=membership&tier=gold" class="mem-cta">LEVEL UP →</a>
+          <div class="mem-glow-edge"></div>
+          <div class="mem-gold-shine"></div>
+        </div>
+
+        <!-- PLATINUM -->
+        <div class="mem-card mem-platinum reveal">
+          <div class="mem-card-bg"></div>
+          <div class="mem-tier-badge">💎 PLATINUM</div>
+          <div class="mem-card-header">
+            <div class="mem-icon">👑</div>
+            <div class="mem-tag">VIP TIER</div>
+          </div>
+          <div class="mem-price-wrap">
+            <span class="mem-price">₹4,999</span>
+            <span class="mem-price-period">/month</span>
+          </div>
+          <div class="mem-hours"><span class="mem-hours-num">200</span> T8 COINS</div>
+          <div style="text-align:center; color: var(--neon-blue); font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;">(~100 Hours Included)</div>
+          <div class="mem-divider"></div>
+          <ul class="mem-perks">
+            <li>
+              <div style="margin-bottom: 5px;"><span class="perk-dot"></span> <strong>Play Options:</strong></div>
+              <div class="mem-play-split">
+                <span class="split-item">🎮 100 Hrs PS5</span> <span class="split-or">OR</span>
+                <span class="split-item">👥 33 Hrs Lounge</span> <span class="split-or">OR</span>
+                <span class="split-item">🏎️ 50 Hrs Sim</span> <span class="split-or">OR</span>
+                <span class="split-item">🎱 33 Hrs Billiards</span>
+              </div>
+            </li>
+            <li><span class="perk-dot"></span> Priority Booking Always</li>
+            <li><span class="perk-dot"></span> Exclusive Event Access &amp; Bonus Rewards</li>
+            <li><span class="perk-dot"></span> Unlimited off-peak gaming (Mon-Fri day)</li>
+            <li><span class="perk-dot"></span> 2 free guest passes/month</li>
+          </ul>
+          <div class="mem-footer-label">Best for serious gamers &amp; VIPs</div>
+          <a href="#book?type=membership&tier=platinum" class="mem-cta">GO PLATINUM →</a>
+          <div class="mem-glow-edge"></div>
+        </div>
+
+      </div>
+
+      <div class="rates-board reveal">
+        <h4 class="rates-board-title">T8 COIN STATION RATES</h4>
+        <div class="rates-grid">
+          <div class="rate-item"><span class="rate-icon">🎮</span> PS5 Individual: <span class="rate-val">2 COINS/HR</span></div>
+          <div class="rate-item"><span class="rate-icon">🏎️</span> Car Simulator: <span class="rate-val">4 COINS/HR</span></div>
+          <div class="rate-item"><span class="rate-icon">👥</span> Group Lounge: <span class="rate-val">6 COINS/HR</span></div>
+          <div class="rate-item"><span class="rate-icon">🎱</span> Billiards: <span class="rate-val">6 COINS/HR</span></div>
+        </div>
+        <p class="rates-footer">💡 Mix and match any station using your T8 Coins! Unused coins roll over if renewed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== OFFERS ========== -->
+  <section class="section offers-section" id="offers">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// LIMITED TIME //</div>
+        <h2 class="section-title">SPECIAL <span class="neon-text">OFFERS</span></h2>
+        <p class="section-sub">Stack your wins. Unlock epic deals and save big.</p>
+      </div>
+      <div class="offers-grid">
+
+        <div class="offer-card offer-combo reveal">
+          <div class="offer-badge-tag">🔥 COMBO DEAL</div>
+          <div class="offer-icon">⚡</div>
+          <h3>POWER COMBO</h3>
+          <p class="offer-desc">Book any 2 stations for 2 hours each and get <strong>1 cup noodles + 1 soft serve FREE</strong>. The ultimate gaming + snack package.</p>
+          <div class="offer-value">
+            <span class="old-price">₹1,000</span>
+            <span class="new-price">₹850</span>
+          </div>
+          <div class="offer-code-wrap">
+            <span class="offer-code-label">USE CODE:</span>
+            <span class="offer-code" id="code-combo">POWER850</span>
+            <button class="copy-btn" onclick="copyCode('code-combo')">COPY</button>
+          </div>
+          <a href="#book" class="btn-offer">GRAB THIS DEAL →</a>
+        </div>
+
+        <div class="offer-card offer-buddy reveal">
+          <div class="offer-badge-tag">👫 BRING A BUDDY</div>
+          <div class="offer-icon">🕹️</div>
+          <h3>BUDDY UP!</h3>
+          <p class="offer-desc">Bring a friend and both of you get <strong>20% OFF</strong> on any individual PS5 station booking. The more the merrier!</p>
+          <div class="offer-value">
+            <span class="discount-badge">SAVE 20%</span>
+          </div>
+          <div class="offer-code-wrap">
+            <span class="offer-code-label">USE CODE:</span>
+            <span class="offer-code" id="code-buddy">BUDDY20</span>
+            <button class="copy-btn" onclick="copyCode('code-buddy')">COPY</button>
+          </div>
+          <a href="#book" class="btn-offer">BRING YOUR BUDDY →</a>
+        </div>
+
+        <div class="offer-card offer-happy reveal">
+          <div class="offer-badge-tag">⏰ HAPPY HOURS</div>
+          <div class="offer-icon">🌅</div>
+          <h3>MORNING GRIND</h3>
+          <p class="offer-desc">Walk in between <strong>10 AM – 1 PM</strong> on any weekday and enjoy <strong>flat ₹50 OFF</strong> per hour on all stations. Early bird gets the loot!</p>
+          <div class="offer-value">
+            <span class="discount-badge">₹50 OFF/HR</span>
+          </div>
+          <div class="offer-code-wrap">
+            <span class="offer-code-label">USE CODE:</span>
+            <span class="offer-code" id="code-happy">MORNING50</span>
+            <button class="copy-btn" onclick="copyCode('code-happy')">COPY</button>
+          </div>
+          <a href="#book" class="btn-offer">CLAIM OFFER →</a>
+        </div>
+
+        <div class="offer-card offer-squad reveal" id="offer-squad-fw">
+          <div class="offer-badge-tag">🎉 SQUAD PLAN</div>
+          <div class="offer-icon">👾</div>
+          <h3>SQUAD TAKEOVER</h3>
+          <p class="offer-desc">Book the entire Group Lounge for <strong>3 hours</strong> and get the 3rd hour absolutely <strong>FREE</strong>. Bring your whole squad!</p>
+          <div class="offer-value">
+            <span class="old-price">₹900</span>
+            <span class="new-price">₹600</span>
+          </div>
+          <div class="offer-code-wrap">
+            <span class="offer-code-label">USE CODE:</span>
+            <span class="offer-code" id="code-squad">SQUAD3X</span>
+            <button class="copy-btn" onclick="copyCode('code-squad')">COPY</button>
+          </div>
+          <a href="#book" class="btn-offer">SQUAD UP →</a>
+        </div>
+
+      </div>
+
+      <!-- LOYALTY BANNER -->
+      <div class="loyalty-banner reveal">
+        <div class="loyalty-left">
+          <div class="loyalty-icon">🏆</div>
+          <div>
+            <h4>TERMINAL LOYALTY CARD</h4>
+            <p>Every 5 hours booked = 1 hour FREE. Ask our staff for your loyalty card at the counter!</p>
+          </div>
+        </div>
+        <a href="#book" class="btn btn-primary">GET STARTED →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== BOOKING FORM ========== -->
+  <section class="section booking-section" id="book">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// INSERT COIN //</div>
+        <h2 class="section-title">BOOK YOUR <span class="neon-text">STATION</span></h2>
+        <p class="section-sub">Reserve your spot before it's game over. We'll confirm your booking ASAP.</p>
+      </div>
+
+      <div class="booking-wrapper reveal">
+        <div class="booking-decoration">
+          <div class="booking-deco-title">PLAYER 1<br/>ENTER NAME</div>
+          <div class="booking-pixel-art">
+            <div class="pixel-char">👾</div>
+          </div>
+          <div class="booking-info-list">
+            <div class="booking-info-item">📍 Near Poly Junction, Thrippyar – 680567</div>
+            <div class="booking-info-item">⏰ Mon–Fri: 11 AM – 10 PM</div>
+            <div class="booking-info-item">⏰ Weekends: 10 AM – 11 PM</div>
+            <div class="booking-info-item">📞 9846302111</div>
+            <div class="booking-info-item">💳 Pay at venue</div>
+          </div>
+        </div>
+
+        <div class="booking-form-container">
+          <div class="form-tabs">
+            <button class="tab-btn active" id="tabStationBtn">STATION BOOKING</button>
+            <button class="tab-btn" id="tabMembershipBtn">MEMBERSHIP</button>
+          </div>
+
+          <!-- STATION BOOKING FORM -->
+          <form class="booking-form" id="bookingForm">
+            <input type="hidden" id="submittedAtIST" name="Submitted At (IST)" value="" />
+            <input type="hidden" name="Booking Type" value="Station" />
+          <div class="form-group">
+            <label for="playerName" class="form-label">PLAYER NAME *</label>
+            <input type="text" id="playerName" name="Player Name" class="form-input" placeholder="Enter your name" required />
+          </div>
+          <div class="form-group">
+            <label for="playerPhone" class="form-label">PHONE NUMBER *</label>
+            <input type="tel" id="playerPhone" name="Phone Number" class="form-input" placeholder="+91 XXXXX XXXXX" required pattern="[0-9]{10}" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookingDate" class="form-label">DATE *</label>
+              <input type="date" id="bookingDate" name="Booking Date" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="bookingTime" class="form-label">TIME *</label>
+              <input type="time" id="bookingTime" name="Booking Time" class="form-input" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duration" class="form-label">HOURS *</label>
+              <select id="duration" name="Duration (Hours)" class="form-input" required>
+                <option value="">Select Hours</option>
+                <option value="1">1 Hour</option>
+                <option value="2">2 Hours</option>
+                <option value="3">3 Hours</option>
+                <option value="4">4 Hours</option>
+                <option value="5">5+ Hours</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="players" class="form-label">PLAYERS</label>
+              <select id="players" name="Number of Players" class="form-input">
+                <option value="1">1 Player</option>
+                <option value="2">2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4">4 Players</option>
+                <option value="5">5 Players</option>
+                <option value="6">6 Players</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="station" class="form-label">STATION *</label>
+            <select id="station" name="Station Selection" class="form-input" required>
+              <option value="">Select Station</option>
+              <option value="PS5 Individual - Station 1">🎮 PS5 Individual – Station 1</option>
+              <option value="PS5 Individual - Station 2">🎮 PS5 Individual – Station 2</option>
+              <option value="PS5 Individual - Station 3">🎮 PS5 Individual – Station 3</option>
+              <option value="PS5 Group Lounge (4-6 Players)">👥 PS5 Group Lounge (4–6 Players)</option>
+              <option value="Car Simulator">🏎️ Car Simulator</option>
+              <option value="Billiards - Private Room">🎱 Billiards – Private Room</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="coupon" class="form-label">COUPON CODE</label>
+            <input type="text" id="coupon" name="Coupon Code" class="form-input" placeholder="Optional — e.g. BUDDY20" />
+          </div>
+          <div class="form-group">
+            <label for="message" class="form-label">SPECIAL REQUESTS</label>
+            <textarea id="message" name="Special Requests" class="form-input form-textarea" placeholder="Any special requests? Birthday party? Specific games?"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="submit-text">⚡ CONFIRM BOOKING</span>
+            <span class="submit-loading" style="display:none">SENDING…</span>
+          </button>
+          <p class="form-note">* We'll reach out to confirm your slot. Pay at the venue.</p>
+          </form>
+
+          <!-- MEMBERSHIP FORM -->
+          <form class="booking-form" id="membershipForm" style="display:none;">
+            <input type="hidden" id="memSubmittedAtIST" name="Submitted At (IST)" value="" />
+            <input type="hidden" name="Booking Type" value="Membership" />
+            <div class="form-group">
+              <label for="memPlayerName" class="form-label">PLAYER NAME *</label>
+              <input type="text" id="memPlayerName" name="Player Name" class="form-input" placeholder="Enter your name" required />
+            </div>
+            <div class="form-group">
+              <label for="memPlayerPhone" class="form-label">PHONE NUMBER *</label>
+              <input type="tel" id="memPlayerPhone" name="Phone Number" class="form-input" placeholder="+91 XXXXX XXXXX" required pattern="[0-9]{10}" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="memTier" class="form-label">MEMBERSHIP TIER *</label>
+                <select id="memTier" name="Membership Tier" class="form-input" required>
+                  <option value="">Select Tier</option>
+                  <option value="Silver">🥈 SILVER (₹999/mo)</option>
+                  <option value="Gold">🥇 GOLD (₹2,499/mo)</option>
+                  <option value="Platinum">💎 PLATINUM (₹4,999/mo)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="memStartDate" class="form-label">START DATE *</label>
+                <input type="date" id="memStartDate" name="Start Date" class="form-input" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="memMessage" class="form-label">SPECIAL REQUESTS</label>
+              <textarea id="memMessage" name="Special Requests" class="form-input form-textarea" placeholder="Any specific requirements?"></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="memSubmitBtn">
+              <span class="submit-text">⚡ REQUEST MEMBERSHIP</span>
+              <span class="submit-loading" style="display:none">SENDING…</span>
+            </button>
+            <p class="form-note">* We'll contact you to set up your membership profile.</p>
+          </form>
+
+          <!-- SUCCESS MESSAGE -->
+          <div class="booking-success" id="bookingSuccess" style="display:none;">
+            <div class="success-icon">🎮</div>
+            <h3>REQUEST SENT!</h3>
+            <p>Level up! We've received your request and will contact you shortly.</p>
+            <button class="btn-submit" style="margin-top:20px; width: auto; padding: 15px 40px;" onclick="resetBookingUI()">
+              <span class="submit-text">BACK TO FORM</span>
+            </button>
+          </div>
+        </div> <!-- Close booking-form-container -->
+      </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-scanline"></div>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Terminal 8" class="footer-logo" />
+          <p>Where pixels meet passion. The ultimate retro gaming cafe for every kind of player.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+            <a href="#" class="social-btn" aria-label="Facebook">💬</a>
+            <a href="#" class="social-btn" aria-label="YouTube">▶️</a>
+          </div>
+        </div>
+        <div class="footer-links-col">
+          <h5>QUICK LINKS</h5>
+          <ul>
+            <li><a href="#stations">Stations</a></li>
+            <li><a href="#food">Cafe Corner</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#offers">Offers</a></li>
+            <li><a href="#book">Book Now</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-hours">
+          <h5>OPEN HOURS</h5>
+          <ul>
+            <li><span>Mon – Fri</span><span>11 AM – 10 PM</span></li>
+            <li><span>Saturday</span><span>10 AM – 11 PM</span></li>
+            <li><span>Sunday</span><span>10 AM – 11 PM</span></li>
+          </ul>
+          <div class="footer-contact">
+            <p>📍 Near Poly Junction, Thrippyar – 680567</p>
+            <p>📞 9846302111</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="currentYear">2026</span> Terminal 8 Gaming Cafe. All Rights Reserved.</p>
+        <p class="footer-pixel">MADE WITH ❤️ + ☕ + 🎮</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main-script.js"></script>
+</body>
+</html>
