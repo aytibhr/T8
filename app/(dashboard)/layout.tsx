@@ -232,6 +232,7 @@ function Header() {
               { href: '/stations', label: 'Stations' },
               { href: '/reports', label: 'Reports' },
               { href: '/memberships', label: 'Memberships', highlight: true },
+              { href: '/leaderboard', label: 'Leaderboard' },
             ].map(item => (
               <Link
                 key={item.href}

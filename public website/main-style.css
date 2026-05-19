@@ -1870,3 +1870,371 @@ h1, h2, h3, h4, h5, h6 {
   align-self: center;
   opacity: 0.7;
 }
+
+/* ==========================================
+   LEADERBOARD SECTION STYLE
+   ========================================== */
+.leaderboard-section {
+  position: relative;
+  background: radial-gradient(circle at center, #0f0a24 0%, #050510 100%);
+  overflow: hidden;
+}
+
+.leaderboard-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+/* PODIUM LAYOUT */
+.podium-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  margin-top: 50px;
+  margin-bottom: 60px;
+  padding-top: 40px;
+}
+
+.podium-card {
+  background: rgba(10, 10, 25, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  width: 260px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.podium-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Podium Placement order */
+.rank-2 { order: 1; }
+.rank-1 { order: 2; z-index: 2; }
+.rank-3 { order: 3; }
+
+/* Individual Rank Styles */
+.rank-1 {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 30px rgba(255, 0, 234, 0.15);
+}
+.rank-1 .podium-pedestal {
+  background: linear-gradient(180deg, var(--neon-pink) 0%, #3a0030 100%);
+  height: 140px;
+}
+.rank-1:hover {
+  box-shadow: 0 0 50px rgba(255, 0, 234, 0.3);
+}
+
+.rank-2 {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.08);
+}
+.rank-2 .podium-pedestal {
+  background: linear-gradient(180deg, var(--neon-blue) 0%, #002235 100%);
+  height: 100px;
+}
+.rank-2:hover {
+  box-shadow: 0 0 35px rgba(0, 243, 255, 0.2);
+}
+
+.rank-3 {
+  border-color: var(--neon-yellow);
+  box-shadow: 0 0 20px rgba(255, 234, 0, 0.08);
+}
+.rank-3 .podium-pedestal {
+  background: linear-gradient(180deg, var(--neon-yellow) 0%, #302600 100%);
+  height: 80px;
+}
+.rank-3:hover {
+  box-shadow: 0 0 35px rgba(255, 234, 0, 0.2);
+}
+
+/* Card Elements */
+.podium-crown {
+  font-size: 2.2rem;
+  position: absolute;
+  top: -38px;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+}
+.glow-gold {
+  filter: drop-shadow(0 0 15px var(--neon-yellow));
+  animation: crownFloat 2s ease-in-out infinite;
+}
+
+@keyframes crownFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.podium-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #0f1026;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  position: relative;
+}
+.rank-1 .podium-avatar {
+  width: 84px;
+  height: 84px;
+  border-color: var(--neon-pink);
+  margin-top: 25px;
+}
+.avatar-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--neon-pink);
+  opacity: 0.4;
+  animation: avatarPulse 2s linear infinite;
+}
+@keyframes avatarPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.avatar-tag {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue);
+}
+.rank-1 .avatar-tag {
+  font-size: 1.05rem;
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.podium-info {
+  padding: 0 20px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.podium-name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+.rank-1 .podium-name {
+  font-size: 1.5rem;
+}
+
+.podium-game {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+.podium-score-wrap {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 6px 15px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+.score-val {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  color: #fff;
+}
+.gold-text {
+  color: var(--neon-yellow) !important;
+  text-shadow: 0 0 10px var(--neon-yellow);
+}
+
+.podium-platform {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  color: var(--neon-green);
+  border: 1px solid var(--neon-green);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.gold-border {
+  border-color: var(--neon-pink) !important;
+  color: var(--neon-pink) !important;
+}
+
+/* Podium Pedestal bases */
+.podium-pedestal {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.pedestal-rank {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.12);
+  line-height: 1;
+}
+.pedestal-shine {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+/* LEADERBOARD TABLE STYLE */
+.leaderboard-table-wrap {
+  background: rgba(10, 10, 25, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.table-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 0, 234, 0.015) 4px,
+    rgba(255, 0, 234, 0.015) 6px
+  );
+  pointer-events: none;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--neon-blue);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 15px 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.col-rank {
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.col-player {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gamer-handle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.real-name {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.col-game {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.col-platform {
+  text-align: center;
+}
+
+.plat-tag {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.ps5-tag {
+  background: rgba(255, 0, 234, 0.1);
+  color: var(--neon-pink);
+  border: 1px solid rgba(255, 0, 234, 0.2);
+}
+.sim-tag {
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--neon-blue);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+}
+
+.col-score {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  font-weight: bold;
+  color: var(--neon-green);
+  text-align: right;
+  text-shadow: 0 0 8px var(--neon-green);
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 868px) {
+  .podium-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  .podium-card {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+  }
+  .rank-1 .podium-pedestal,
+  .rank-2 .podium-pedestal,
+  .rank-3 .podium-pedestal {
+    height: 60px;
+  }
+  .rank-1 { order: 1; }
+  .rank-2 { order: 2; }
+  .rank-3 { order: 3; }
+
+  .leaderboard-table th:nth-child(3),
+  .leaderboard-table td:nth-child(3) {
+    display: none; /* Hide Game column on mobile */
+  }
+}
+

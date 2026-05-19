@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J30TS2W077"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-J30TS2W077');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terminal 8 Gaming Cafe | Retro Gaming Hub</title>
@@ -48,6 +57,7 @@
       <li><a href="#food" class="nav-link">Cafe</a></li>
       <li><a href="#pricing" class="nav-link">Pricing</a></li>
       <li><a href="#offers" class="nav-link">Offers</a></li>
+      <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
       <li><a href="#book" class="nav-link nav-cta">Book Now</a></li>
     </ul>
   </nav>
@@ -472,6 +482,132 @@
         <a href="#book" class="btn btn-primary">GET STARTED →</a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ========== LEADERBOARD ========== -->
+  <section class="section leaderboard-section" id="leaderboard">
+    <div class="leaderboard-bg-grid" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">// HALL OF FAME //</div>
+        <h2 class="section-title">TOP <span class="neon-text">PLAYERS</span></h2>
+        <p class="section-sub">Witness the elite champions of Terminal 8. Rack up high scores to secure your legacy.</p>
+        <div class="mem-pixel-bar reveal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- PODIUM (TOP 3) -->
+      <div class="podium-wrapper reveal" id="leaderboardPodium">
+        <!-- 2nd Place -->
+        <div class="podium-card rank-2">
+          <div class="podium-crown">🥈</div>
+          <div class="podium-avatar">
+            <span class="avatar-tag" id="podium2Tag">VS2</span>
+          </div>
+          <div class="podium-info">
+            <h3 class="podium-name" id="podium2GamerTag">SPEEDSTER</h3>
+            <p class="podium-game" id="podium2Game">F1 23 (Racing Sim)</p>
+            <div class="podium-score-wrap">
+              <span class="score-val" id="podium2Score">1:12.450</span>
+            </div>
+            <div class="podium-platform" id="podium2Platform">SIM</div>
+          </div>
+          <div class="podium-pedestal">
+            <div class="pedestal-rank">2</div>
+          </div>
+        </div>
+
+        <!-- 1st Place (Featured Center) -->
+        <div class="podium-card rank-1">
+          <div class="podium-crown glow-gold">👑</div>
+          <div class="podium-avatar">
+            <div class="avatar-glow"></div>
+            <span class="avatar-tag tag-gold" id="podium1Tag">N1</span>
+          </div>
+          <div class="podium-info">
+            <h3 class="podium-name neon-text-pink" id="podium1GamerTag">NINJAX</h3>
+            <p class="podium-game" id="podium1Game">Valorant (PS5)</p>
+            <div class="podium-score-wrap">
+              <span class="score-val gold-text" id="podium1Score">42,500 XP</span>
+            </div>
+            <div class="podium-platform gold-border" id="podium1Platform">PS5</div>
+          </div>
+          <div class="podium-pedestal">
+            <div class="pedestal-shine"></div>
+            <div class="pedestal-rank">1</div>
+          </div>
+        </div>
+
+        <!-- 3rd Place -->
+        <div class="podium-card rank-3">
+          <div class="podium-crown">🥉</div>
+          <div class="podium-avatar">
+            <span class="avatar-tag" id="podium3Tag">AP3</span>
+          </div>
+          <div class="podium-info">
+            <h3 class="podium-name" id="podium3GamerTag">APEX_PRED</h3>
+            <p class="podium-game" id="podium3Game">Apex Legends (PS5)</p>
+            <div class="podium-score-wrap">
+              <span class="score-val" id="podium3Score">3,800 Pts</span>
+            </div>
+            <div class="podium-platform" id="podium3Platform">PS5</div>
+          </div>
+          <div class="podium-pedestal">
+            <div class="pedestal-rank">3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE (RANKS 4-10) -->
+      <div class="leaderboard-table-wrap reveal">
+        <div class="table-scanline"></div>
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th style="width: 10%; text-align: center;">RANK</th>
+              <th style="width: 35%;">GAMER</th>
+              <th style="width: 25%;">GAME</th>
+              <th style="width: 15%; text-align: center;">PLATFORM</th>
+              <th style="width: 15%; text-align: right;">SCORE</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardRows">
+            <!-- Row 4 -->
+            <tr>
+              <td class="col-rank">#4</td>
+              <td class="col-player">
+                <span class="gamer-handle">CUE_MASTER</span>
+                <span class="real-name">Rahul Sharma</span>
+              </td>
+              <td class="col-game">8-Ball Pool</td>
+              <td class="col-platform"><span class="plat-tag sim-tag">BILLIARDS</span></td>
+              <td class="col-score">18 Wins</td>
+            </tr>
+            <!-- Row 5 -->
+            <tr>
+              <td class="col-rank">#5</td>
+              <td class="col-player">
+                <span class="gamer-handle">VIPER_STRIKE</span>
+                <span class="real-name">Aditya Nair</span>
+              </td>
+              <td class="col-game">Mortal Kombat 1</td>
+              <td class="col-platform"><span class="plat-tag ps5-tag">PS5</span></td>
+              <td class="col-score">22,100 XP</td>
+            </tr>
+            <!-- Row 6 -->
+            <tr>
+              <td class="col-rank">#6</td>
+              <td class="col-player">
+                <span class="gamer-handle">DRIFT_KING</span>
+                <span class="real-name">Kevin Jose</span>
+              </td>
+              <td class="col-game">Gran Turismo 7</td>
+              <td class="col-platform"><span class="plat-tag sim-tag">SIM</span></td>
+              <td class="col-score">1:14.992</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 

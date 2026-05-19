@@ -297,7 +297,90 @@ window.copyCode = function(elementId) {
       btn.style.background = "#333";
       btn.style.color = "#fff";
     }, 2000);
-  }).catch(err => {
-    console.error('Failed to copy text: ', err);
   });
 };
+
+// --- 10. LEADERBOARD DYNAMIC FETCH & RENDER ---
+(function() {
+  const fetchLeaderboard = async () => {
+    let apiUrl = '/api/leaderboard';
+    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+      apiUrl = 'http://localhost:3000/api/leaderboard';
+    } else {
+      apiUrl = 'https://admin.terminal8.live/api/leaderboard';
+    }
+
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error('Network response was not ok');
+      const players = await res.json();
+      if (Array.isArray(players) && players.length > 0) {
+        renderLeaderboard(players);
+      }
+    } catch (error) {
+      console.log('Using static fallback for leaderboard due to connection block/offline:', error);
+    }
+  };
+
+  const renderLeaderboard = (players) => {
+    // Sort players by rank ascending
+    players.sort((a, b) => a.rank - b.rank);
+
+    // Populate Podium
+    const p1 = players.find(p => p.rank === 1);
+    const p2 = players.find(p => p.rank === 2);
+    const p3 = players.find(p => p.rank === 3);
+
+    if (p1) {
+      document.getElementById('podium1GamerTag').textContent = p1.gamerTag;
+      document.getElementById('podium1Game').textContent = `${p1.gameName} (${p1.platform})`;
+      document.getElementById('podium1Score').textContent = p1.formattedScore;
+      document.getElementById('podium1Platform').textContent = p1.platform.toUpperCase();
+      document.getElementById('podium1Tag').textContent = p1.gamerTag.slice(0, 3).toUpperCase();
+    }
+    if (p2) {
+      document.getElementById('podium2GamerTag').textContent = p2.gamerTag;
+      document.getElementById('podium2Game').textContent = `${p2.gameName} (${p2.platform})`;
+      document.getElementById('podium2Score').textContent = p2.formattedScore;
+      document.getElementById('podium2Platform').textContent = p2.platform.toUpperCase();
+      document.getElementById('podium2Tag').textContent = p2.gamerTag.slice(0, 3).toUpperCase();
+    }
+    if (p3) {
+      document.getElementById('podium3GamerTag').textContent = p3.gamerTag;
+      document.getElementById('podium3Game').textContent = `${p3.gameName} (${p3.platform})`;
+      document.getElementById('podium3Score').textContent = p3.formattedScore;
+      document.getElementById('podium3Platform').textContent = p3.platform.toUpperCase();
+      document.getElementById('podium3Tag').textContent = p3.gamerTag.slice(0, 3).toUpperCase();
+    }
+
+    // Populate Table (Ranks 4+)
+    const tableBody = document.getElementById('leaderboardRows');
+    const tablePlayers = players.filter(p => p.rank >= 4);
+
+    if (tablePlayers.length > 0 && tableBody) {
+      tableBody.innerHTML = '';
+      tablePlayers.forEach(p => {
+        const tr = document.createElement('tr');
+        
+        // Define tags
+        const platformClass = p.platform.toLowerCase().includes('sim') ? 'sim-tag' : 'ps5-tag';
+        const rankColor = p.rank === 4 ? 'style="color: var(--neon-pink);"' : '';
+
+        tr.innerHTML = `
+          <td class="col-rank" ${rankColor}>#${p.rank}</td>
+          <td class="col-player">
+            <span class="gamer-handle">${p.gamerTag}</span>
+            <span class="real-name">${p.playerName}</span>
+          </td>
+          <td class="col-game">${p.gameName}</td>
+          <td class="col-platform"><span class="plat-tag ${platformClass}">${p.platform.toUpperCase()}</span></td>
+          <td class="col-score font-mono">${p.formattedScore}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', fetchLeaderboard);
+})();
+

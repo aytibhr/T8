@@ -207,3 +207,22 @@ export enum ActivityType {
   INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
 }
+
+export const leaderboard = pgTable('leaderboard', {
+  id: serial('id').primaryKey(),
+  rank: integer('rank').notNull(),
+  playerName: varchar('player_name', { length: 100 }).notNull(),
+  gamerTag: varchar('gamer_tag', { length: 100 }).notNull(),
+  gameName: varchar('game_name', { length: 100 }).notNull(),
+  score: integer('score').notNull(),
+  pointsType: varchar('points_type', { length: 50 }).notNull().default('XP'),
+  formattedScore: varchar('formatted_score', { length: 50 }).notNull(),
+  platform: varchar('platform', { length: 50 }).notNull(),
+  rankTier: varchar('rank_tier', { length: 50 }).notNull().default('Gold'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export type LeaderboardEntry = typeof leaderboard.$inferSelect;
+export type NewLeaderboardEntry = typeof leaderboard.$inferInsert;
+
