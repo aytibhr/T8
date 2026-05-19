@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Trash2, Plus, Trophy, Edit, X, ShieldAlert, Sparkles } from 'lucide-react';
+import { Trash2, Plus, Trophy, Edit, X, ShieldAlert, Sparkles, Loader2 } from 'lucide-react';
 import { createLeaderboardEntry, updateLeaderboardEntry, deleteLeaderboardEntry } from './actions';
 import { useNotifications } from '@/lib/hooks/useNotifications';
 
@@ -29,6 +29,7 @@ function Modal({ open, onClose, title, borderColor = '#00f3ff', children }: any)
 
 export function LeaderboardClient({ initialEntries }: { initialEntries: any[] }) {
   const { addNotification } = useNotifications();
+  const [loading, setLoading] = useState(false);
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState<{ open: boolean; entry: any }>({ open: false, entry: null });
   const [deleteModal, setDeleteModal] = useState<{ open: boolean; entry: any }>({ open: false, entry: null });
@@ -50,6 +51,7 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
       return;
     }
 
+    setLoading(true);
     try {
       await createLeaderboardEntry({
         rank: formRank,
@@ -69,6 +71,8 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
     } catch (err) {
       console.error(err);
       addNotification({ type: 'error', title: 'Error', message: 'Failed to create entry.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,6 +82,7 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
       return;
     }
 
+    setLoading(true);
     try {
       await updateLeaderboardEntry(editModal.entry.id, {
         rank: formRank,
@@ -97,10 +102,13 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
     } catch (err) {
       console.error(err);
       addNotification({ type: 'error', title: 'Error', message: 'Failed to update entry.' });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       await deleteLeaderboardEntry(deleteModal.entry.id);
       addNotification({ type: 'warning', title: 'Player Removed', message: `${deleteModal.entry.gamerTag} removed from leaderboard.` });
@@ -108,6 +116,8 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
     } catch (err) {
       console.error(err);
       addNotification({ type: 'error', title: 'Error', message: 'Failed to delete entry.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -374,12 +384,23 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
             <Button
               onClick={() => setAddModal(false)}
               variant="outline"
+              disabled={loading}
               className="flex-1 border-gray-700 text-gray-400"
             >
               CANCEL
             </Button>
-            <Button onClick={handleAdd} className="flex-1 bg-[#00f3ff] text-black font-pixel text-xs border-none">
-              CREATE RANK
+            <Button 
+              onClick={handleAdd} 
+              disabled={loading} 
+              className="flex-1 bg-[#00f3ff] text-black font-pixel text-xs border-none flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> REGISTERING...
+                </>
+              ) : (
+                'CREATE RANK'
+              )}
             </Button>
           </div>
         </div>
@@ -495,12 +516,23 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
             <Button
               onClick={() => setEditModal({ open: false, entry: null })}
               variant="outline"
+              disabled={loading}
               className="flex-1 border-gray-700 text-gray-400"
             >
               CANCEL
             </Button>
-            <Button onClick={handleEdit} className="flex-1 bg-[#ffea00] text-black font-pixel text-xs border-none">
-              SAVE CHANGES
+            <Button 
+              onClick={handleEdit} 
+              disabled={loading} 
+              className="flex-1 bg-[#ffea00] text-black font-pixel text-xs border-none flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> SAVING...
+                </>
+              ) : (
+                'SAVE CHANGES'
+              )}
             </Button>
           </div>
         </div>
@@ -517,12 +549,23 @@ export function LeaderboardClient({ initialEntries }: { initialEntries: any[] })
             <Button
               onClick={() => setDeleteModal({ open: false, entry: null })}
               variant="outline"
+              disabled={loading}
               className="flex-1 border-gray-700 text-gray-400"
             >
               CANCEL
             </Button>
-            <Button onClick={handleDelete} className="flex-1 bg-[#ff0055] text-white font-pixel text-xs border-none">
-              DELETE RANK
+            <Button 
+              onClick={handleDelete} 
+              disabled={loading} 
+              className="flex-1 bg-[#ff0055] text-white font-pixel text-xs border-none flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> REMOVING...
+                </>
+              ) : (
+                'DELETE RANK'
+              )}
             </Button>
           </div>
         </div>
