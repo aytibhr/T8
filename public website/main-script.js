@@ -307,7 +307,7 @@ window.copyCode = function(elementId) {
     if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
       apiUrl = 'http://localhost:3000/api/leaderboard';
     } else {
-      apiUrl = 'https://admin.terminal8.live/api/leaderboard';
+      apiUrl = 'https://shop.terminal8.live/api/leaderboard';
     }
 
     try {
