@@ -70,6 +70,7 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
   const [checkoutName, setCheckoutName] = useState('');
   const [checkoutPhone, setCheckoutPhone] = useState('');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [customAmountCash, setCustomAmountCash] = useState<number>(0);
 
   // Active Station Addons modal state
   const [stationAddonsModal, setStationAddonsModal] = useState<{ open: boolean; station: any }>({ open: false, station: null });
@@ -182,8 +183,16 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
     setCheckoutPhone('');
     if (station?.session) {
       setAddonsLoading(true);
-      await loadSessionAddons(station.session.id);
+      const list = await loadSessionAddons(station.session.id);
       setAddonsLoading(false);
+
+      const s = station.session;
+      const isMember = s.totalPrice === 0;
+      const addonsTotal = list.reduce((sum: number, item: any) => sum + (item.priceAtPurchase * item.quantity), 0);
+      const calculatedCash = isMember 
+        ? addonsTotal 
+        : Math.round((s.durationMinutes / 60) * station.ratePerHour) + addonsTotal;
+      setCustomAmountCash(calculatedCash);
     }
   };
 
@@ -213,10 +222,8 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
     const s = checkoutModal.station.session;
     const isMember = s.totalPrice === 0;
     const finalCoins = isMember ? Math.ceil(s.durationMinutes / 15) : 0;
-    // Final Cash includes session play time cost + total addon items cost
-    const finalCash = isMember 
-      ? totalAddonsPrice 
-      : Math.round((s.durationMinutes / 60) * checkoutModal.station.ratePerHour) + totalAddonsPrice;
+    // Use the operator's custom overridden cash amount
+    const finalCash = customAmountCash;
 
     setCheckoutLoading(true);
     try {
@@ -548,14 +555,31 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
               <div className="p-3 bg-[#0f1026] border border-[#ff00ea]/40 rounded">
                 <p className="text-[#ff00ea] text-xs mb-1">FINAL BILL</p>
                 {checkoutModal.station.session.totalPrice === 0 ? (
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     <p className="text-xl font-pixel text-[#ffea00]">{Math.ceil(checkoutModal.station.session.durationMinutes / 15)} COINS</p>
-                    {totalAddonsPrice > 0 && <p className="text-[10px] text-gray-400 font-mono">+ ₹{totalAddonsPrice} Addons</p>}
+                    <div className="mt-2 border-t border-gray-800 pt-2">
+                      <label className="block text-gray-400 text-[10px] mb-1 font-mono">ADDONS CASH BILL</label>
+                      <div className="relative flex items-center">
+                        <span className="absolute left-2 text-[#00ff55] font-pixel text-xs">₹</span>
+                        <Input
+                          type="number"
+                          value={customAmountCash}
+                          onChange={(e) => setCustomAmountCash(Math.max(0, parseInt(e.target.value) || 0))}
+                          className="bg-[#0a0a1a] border-[#00ff55]/30 focus:border-[#00ff55] text-[#00ff55] font-pixel text-xs pl-5 pr-1 py-0.5 h-7 w-full shadow-[0_0_10px_rgba(0,255,85,0.1)] focus:shadow-[0_0_20px_rgba(0,255,85,0.25)] transition-all"
+                        />
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <p className="text-xl font-pixel text-[#00ff55]">
-                    ₹{Math.round((checkoutModal.station.session.durationMinutes / 60) * checkoutModal.station.ratePerHour) + totalAddonsPrice}
-                  </p>
+                  <div className="relative mt-1 flex items-center">
+                    <span className="absolute left-2.5 text-[#00ff55] font-pixel text-lg">₹</span>
+                    <Input
+                      type="number"
+                      value={customAmountCash}
+                      onChange={(e) => setCustomAmountCash(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="bg-[#0a0a1a] border-[#00ff55]/50 focus:border-[#00ff55] text-[#00ff55] font-pixel text-lg pl-7 pr-2.5 py-1.5 w-full shadow-[0_0_15px_rgba(0,255,85,0.15)] focus:shadow-[0_0_25px_rgba(0,255,85,0.3)] transition-all"
+                    />
+                  </div>
                 )}
               </div>
             </div>
