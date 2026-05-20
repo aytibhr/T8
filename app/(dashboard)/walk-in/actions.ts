@@ -5,7 +5,7 @@ import { stations, sessions, transactions, userMemberships } from '@/lib/db/sche
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-export async function allotSession(data: { stationId: number; durationMinutes: number; type: 'walkin' | 'member'; userPhone?: string }) {
+export async function allotSession(data: { stationId: number; durationMinutes: number; setupMinutes: number; type: 'walkin' | 'member'; userPhone?: string }) {
   const [station] = await db.select().from(stations).where(eq(stations.id, data.stationId));
   if (!station) throw new Error('Station not found');
 
@@ -14,8 +14,8 @@ export async function allotSession(data: { stationId: number; durationMinutes: n
   await db.insert(sessions).values({
     stationId: data.stationId,
     startTime: new Date(),
-    endTime: new Date(Date.now() + data.durationMinutes * 60000),
-    durationMinutes: data.durationMinutes,
+    endTime: new Date(Date.now() + (data.durationMinutes + data.setupMinutes) * 60000),
+    durationMinutes: data.durationMinutes, // actual played time stored in db
     totalPrice,
     status: 'Active',
     userPhone: data.userPhone,
@@ -26,6 +26,12 @@ export async function allotSession(data: { stationId: number; durationMinutes: n
 }
 
 export async function checkoutSession(data: { stationId: number; sessionId: number; customerName: string; customerPhone: string; type: 'walkin' | 'member'; finalAmountCash: number; finalCoinsUsed: number }) {
+  // Idempotency check: prevent duplicate checkouts from inserting multiple transactions
+  const [session] = await db.select().from(sessions).where(eq(sessions.id, data.sessionId));
+  if (!session || session.status === 'Completed') {
+    return { success: false, message: 'Session already completed' };
+  }
+
   await db.update(sessions).set({ status: 'Completed' }).where(eq(sessions.id, data.sessionId));
   await db.update(stations).set({ status: 'Active' }).where(eq(stations.id, data.stationId));
 
@@ -48,6 +54,7 @@ export async function checkoutSession(data: { stationId: number; sessionId: numb
 
   revalidatePath('/dashboard');
   revalidatePath('/reports');
+  return { success: true };
 }
 
 export async function add15Mins(stationId: number, sessionId: number) {

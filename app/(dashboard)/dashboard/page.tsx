@@ -1,11 +1,11 @@
 import { db } from '@/lib/db/drizzle';
-import { stations, sessions, transactions, userMemberships, membershipPlans } from '@/lib/db/schema';
+import { stations, sessions, transactions, userMemberships, membershipPlans, addons } from '@/lib/db/schema';
 import { eq, desc, gte, sql } from 'drizzle-orm';
 import { DashboardClient } from './dashboard-client';
 import { getUser } from '@/lib/db/queries';
 
 export default async function DashboardPage() {
-  const [allStations, activeSessions, todaysTxns, allMembers, plans] = await Promise.all([
+  const [allStations, activeSessions, todaysTxns, allMembers, plans, allAddons] = await Promise.all([
     db.select().from(stations).orderBy(stations.id),
     db.select().from(sessions).where(eq(sessions.status, 'Active')),
     db.select().from(transactions).where(gte(transactions.timestamp, new Date(new Date().setHours(0, 0, 0, 0)))),
@@ -20,6 +20,7 @@ export default async function DashboardPage() {
       .from(userMemberships)
       .leftJoin(membershipPlans, eq(userMemberships.planId, membershipPlans.id)),
     db.select().from(membershipPlans),
+    db.select().from(addons).orderBy(addons.name),
   ]);
 
   const recentTxns = await db.select({
@@ -32,9 +33,13 @@ export default async function DashboardPage() {
     transactionType: transactions.transactionType,
     timestamp: transactions.timestamp,
     customerName: transactions.customerName,
+    sessionStartTime: sessions.startTime,
+    sessionEndTime: sessions.endTime,
+    sessionDuration: sessions.durationMinutes,
   })
     .from(transactions)
     .leftJoin(userMemberships, eq(transactions.userPhone, userMemberships.phone))
+    .leftJoin(sessions, eq(transactions.sessionId, sessions.id))
     .orderBy(desc(transactions.timestamp))
     .limit(8);
 
@@ -59,6 +64,7 @@ export default async function DashboardPage() {
       vipCount={vipCount}
       totalStations={allStations.length}
       user={user}
+      addons={allAddons}
     />
   );
 }

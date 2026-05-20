@@ -5,12 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SuccessModal } from '@/components/ui/success-modal';
 import { WA_TEMPLATES } from '@/lib/utils/whatsapp';
-import { Monitor, Zap, CheckCircle2, Settings2, Plus, Clock, IndianRupee, Users, User, Coins, AlertTriangle, X } from 'lucide-react';
+import { Monitor, Zap, CheckCircle2, Settings2, Plus, Clock, IndianRupee, Users, User, Coins, AlertTriangle, X, CupSoda, Trash2 } from 'lucide-react';
 import { allotSession, checkoutSession, add15Mins } from '../walk-in/actions';
+import { getSessionAddons, addAddonToSession, removeAddonFromSession } from '../addons/actions';
 import { useNotifications } from '@/lib/hooks/useNotifications';
 import { Modal } from '@/components/ui/modal';
-
-
 
 /* ─── confirm modal ─── */
 function ConfirmModal({ open, onClose, onConfirm, title, message, confirmLabel = 'CONFIRM', confirmColor = '#ff00ea' }: any) {
@@ -49,14 +48,14 @@ function getRemainingTime(endTime: Date, now: Date) {
   return { minutes, seconds, isExpired: false, isWarning: minutes < 15 && minutes >= 0, totalMs: diff };
 }
 
-export function DashboardClient({ stations, members, plans, recentTxns, todaysRevenue, vipCount, totalStations, user }: any) {
+export function DashboardClient({ stations, members, plans, recentTxns, todaysRevenue, vipCount, totalStations, user, addons = [] }: any) {
   const [now, setNow] = useState<Date | null>(null);
   const { addNotification } = useNotifications();
   const alertedStations = useRef<Set<number>>(new Set());
 
-
   // Success Modal (WhatsApp)
   const [successData, setSuccessData] = useState<{ open: boolean; title: string; message: string; waPhone?: string; waMessage?: string }>({ open: false, title: '', message: '' });
+  
   // Allot modal state
   const [allotModal, setAllotModal] = useState<{ open: boolean; station: any }>({ open: false, station: null });
   const [allotType, setAllotType] = useState<'walkin' | 'member'>('walkin');
@@ -70,6 +69,14 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
   const [checkoutModal, setCheckoutModal] = useState<{ open: boolean; station: any }>({ open: false, station: null });
   const [checkoutName, setCheckoutName] = useState('');
   const [checkoutPhone, setCheckoutPhone] = useState('');
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  // Active Station Addons modal state
+  const [stationAddonsModal, setStationAddonsModal] = useState<{ open: boolean; station: any }>({ open: false, station: null });
+  const [currentSessionAddons, setCurrentSessionAddons] = useState<any[]>([]);
+  const [selectedAddonId, setSelectedAddonId] = useState<string>('');
+  const [addonQuantity, setAddonQuantity] = useState(1);
+  const [addonsLoading, setAddonsLoading] = useState(false);
 
   // +15 confirm modal
   const [extend15Modal, setExtend15Modal] = useState<{ open: boolean; station: any }>({ open: false, station: null });
@@ -98,7 +105,6 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
         osc.stop(ctx.currentTime + start + duration);
       };
 
-      // Play 3 rounds of the sequence for ~4 seconds
       for (let i = 0; i < 3; i++) {
         const offset = i * 1.4;
         playBeep(880, offset + 0, 0.3);
@@ -109,8 +115,6 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
     } catch (_) {}
   }, []);
 
-
-
   const filteredMembers = members.filter((m: any) =>
     memberSearch && (m.phone.includes(memberSearch) || m.name.toLowerCase().includes(memberSearch.toLowerCase()))
   );
@@ -118,27 +122,120 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
   const estimatedCoins = Math.ceil(allotTime / 15);
   const coinShortfall = selectedMember && estimatedCoins > selectedMember.coinsBalance;
 
+  // Addon loading helper
+  const loadSessionAddons = async (sessionId: number) => {
+    try {
+      const list = await getSessionAddons(sessionId);
+      setCurrentSessionAddons(list);
+      return list;
+    } catch (e) {
+      console.error('Error loading session addons:', e);
+      return [];
+    }
+  };
+
+  const openStationAddonsModal = async (station: any) => {
+    setStationAddonsModal({ open: true, station });
+    setSelectedAddonId('');
+    setAddonQuantity(1);
+    if (station?.session) {
+      setAddonsLoading(true);
+      await loadSessionAddons(station.session.id);
+      setAddonsLoading(false);
+    }
+  };
+
+  const handleAddAddon = async () => {
+    if (!stationAddonsModal.station?.session || !selectedAddonId) return;
+    setAddonsLoading(true);
+    try {
+      await addAddonToSession(stationAddonsModal.station.session.id, parseInt(selectedAddonId), addonQuantity);
+      await loadSessionAddons(stationAddonsModal.station.session.id);
+      addNotification({ type: 'success', title: 'Addon Added', message: 'Product added to station session.' });
+      setAddonQuantity(1);
+      setSelectedAddonId('');
+    } catch (e: any) {
+      addNotification({ type: 'error', title: 'Error', message: e.message });
+    }
+    setAddonsLoading(false);
+  };
+
+  const handleRemoveAddon = async (sessionAddonId: number) => {
+    setAddonsLoading(true);
+    try {
+      await removeAddonFromSession(sessionAddonId);
+      if (stationAddonsModal.station?.session) {
+        await loadSessionAddons(stationAddonsModal.station.session.id);
+      } else if (checkoutModal.station?.session) {
+        await loadSessionAddons(checkoutModal.station.session.id);
+      }
+      addNotification({ type: 'info', title: 'Addon Removed', message: 'Product removed from session.' });
+    } catch (e: any) {
+      addNotification({ type: 'error', title: 'Error', message: e.message });
+    }
+    setAddonsLoading(false);
+  };
+
+  const openCheckoutModal = async (station: any) => {
+    setCheckoutModal({ open: true, station });
+    setCheckoutName('');
+    setCheckoutPhone('');
+    if (station?.session) {
+      setAddonsLoading(true);
+      await loadSessionAddons(station.session.id);
+      setAddonsLoading(false);
+    }
+  };
+
   const handleAllot = async () => {
     if (!allotModal.station) return;
     if (allotType === 'member' && !selectedMember) { addNotification({ type: 'error', title: 'No Member', message: 'Please select a VIP member.' }); return; }
     if (coinShortfall) return;
     setAllotLoading(true);
     try {
-      await allotSession({ stationId: allotModal.station.id, durationMinutes: allotTime + setupTime, type: allotType, userPhone: selectedMember?.phone });
+      await allotSession({ 
+        stationId: allotModal.station.id, 
+        durationMinutes: allotTime, // actual played time stored in db
+        setupMinutes: setupTime, // setup minutes added to endTime only
+        type: allotType, 
+        userPhone: selectedMember?.phone 
+      });
       setAllotModal({ open: false, station: null });
       setAllotTime(60); setSetupTime(4); setAllotType('walkin'); setMemberSearch(''); setSelectedMember(null);
     } catch (e: any) { addNotification({ type: 'error', title: 'Error', message: e.message }); }
     setAllotLoading(false);
   };
 
+  const totalAddonsPrice = currentSessionAddons.reduce((sum, item) => sum + (item.priceAtPurchase * item.quantity), 0);
+
   const handleCheckout = async () => {
     if (!checkoutModal.station?.session) return;
     const s = checkoutModal.station.session;
     const isMember = s.totalPrice === 0;
-    const finalCoins = isMember ? Math.ceil((s.durationMinutes - setupTime) / 15) : 0;
-    const finalCash = isMember ? 0 : Math.round(((s.durationMinutes - setupTime) / 60) * checkoutModal.station.ratePerHour);
+    const finalCoins = isMember ? Math.ceil(s.durationMinutes / 15) : 0;
+    // Final Cash includes session play time cost + total addon items cost
+    const finalCash = isMember 
+      ? totalAddonsPrice 
+      : Math.round((s.durationMinutes / 60) * checkoutModal.station.ratePerHour) + totalAddonsPrice;
+
+    setCheckoutLoading(true);
     try {
-      await checkoutSession({ stationId: checkoutModal.station.id, sessionId: s.id, customerName: checkoutName, customerPhone: isMember ? (s.userPhone || '') : checkoutPhone, type: isMember ? 'member' : 'walkin', finalAmountCash: finalCash, finalCoinsUsed: finalCoins });
+      const res = await checkoutSession({ 
+        stationId: checkoutModal.station.id, 
+        sessionId: s.id, 
+        customerName: checkoutName, 
+        customerPhone: isMember ? (s.userPhone || '') : checkoutPhone, 
+        type: isMember ? 'member' : 'walkin', 
+        finalAmountCash: finalCash, 
+        finalCoinsUsed: finalCoins 
+      });
+
+      if (res && res.success === false) {
+        addNotification({ type: 'warning', title: 'Checkout Complete', message: 'This session has already been checked out.' });
+        setCheckoutModal({ open: false, station: null });
+        setCheckoutLoading(false);
+        return;
+      }
       
       const phone = isMember ? (s.userPhone || '') : checkoutPhone;
       const memberData = isMember ? members.find((m: any) => m.phone === phone) : null;
@@ -154,12 +251,13 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
       setSuccessData({
         open: true,
         title: 'PAYMENT RECEIVED',
-        message: `Checkout complete for ${checkoutModal.station.name}.`,
+        message: `Checkout complete for ${checkoutModal.station.name}. Total Paid: ₹${finalCash}`,
         waPhone: phone,
         waMessage: waMessage
       });
       addNotification({ type: 'success', title: 'Checkout Done', message: `${checkoutModal.station.name} is now free.` });
     } catch (e: any) { addNotification({ type: 'error', title: 'Error', message: e.message }); }
+    setCheckoutLoading(false);
   };
 
   const handleExtend15 = async () => {
@@ -213,10 +311,21 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
             <div key={station.id} className={`bg-[#0a0a1a] rounded-xl p-5 border-2 flex flex-col ${border} transition-all`}>
               <div className="flex justify-between items-start mb-4">
                 <h3 className="font-orbitron text-white text-base font-bold leading-tight">{station.name}</h3>
-                <span className={`text-[10px] px-2 py-0.5 rounded font-mono uppercase font-bold ${
-                  station.status === 'Active' ? 'text-[#00ff55] bg-[#00ff55]/20' :
-                  station.status === 'Occupied' ? 'text-[#00f3ff] bg-[#00f3ff]/20' : 'text-gray-400 bg-gray-800'
-                }`}>{station.status}</span>
+                <div className="flex items-center gap-2">
+                  {station.status === 'Occupied' && (
+                    <button 
+                      onClick={() => openStationAddonsModal(station)}
+                      title="Manage Addons" 
+                      className="p-1.5 rounded-md bg-[#00f3ff]/10 hover:bg-[#00f3ff]/30 text-[#00f3ff] hover:scale-110 transition-all border border-[#00f3ff]/20 flex items-center justify-center shrink-0"
+                    >
+                      <CupSoda className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-mono uppercase font-bold ${
+                    station.status === 'Active' ? 'text-[#00ff55] bg-[#00ff55]/20' :
+                    station.status === 'Occupied' ? 'text-[#00f3ff] bg-[#00f3ff]/20' : 'text-gray-400 bg-gray-800'
+                  }`}>{station.status}</span>
+                </div>
               </div>
 
               <div className="flex-grow flex items-center justify-center py-4">
@@ -245,7 +354,7 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
                     <Button onClick={() => setExtend15Modal({ open: true, station })} variant="outline" className="flex-1 border-gray-700 text-gray-300 font-mono text-xs py-4">
                       <Clock className="w-3 h-3 mr-1" /> +15
                     </Button>
-                    <Button onClick={() => { setCheckoutModal({ open: true, station }); setCheckoutName(''); setCheckoutPhone(''); }} className="flex-1 bg-[#ff00ea] hover:bg-[#cc00bb] text-white font-mono text-xs py-4 border-none">
+                    <Button onClick={() => openCheckoutModal(station)} className="flex-1 bg-[#ff00ea] hover:bg-[#cc00bb] text-white font-mono text-xs py-4 border-none">
                       <CheckCircle2 className="w-3 h-3 mr-1" /> CHECKOUT
                     </Button>
                   </>
@@ -279,15 +388,27 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
             <div key={t.id} className="flex justify-between items-center px-5 py-3 hover:bg-[#0f1026] transition-colors">
               <div>
                 <p className="font-mono text-sm text-white font-bold">TXN-{t.id} · {t.transactionType}</p>
-                <p className="font-mono text-xs text-gray-500">
+                <p className="font-mono text-xs text-gray-400 mt-0.5">
                   {t.userName ? (
-                    `${t.userName} (${t.userPhone})`
+                    <span className="text-[#ffea00] font-bold">{t.userName} ({t.userPhone})</span>
                   ) : t.customerName ? (
-                    `${t.customerName} (${t.userPhone || 'Walk-In'})`
+                    <span className="text-gray-300 font-bold">{t.customerName} ({t.userPhone || 'Walk-In'})</span>
                   ) : (
-                    t.userPhone || 'Walk-In'
-                  )} · {new Date(t.timestamp).toLocaleTimeString()}
+                    <span className="text-gray-300">{t.userPhone || 'Walk-In'}</span>
+                  )} · {new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
+                {t.transactionType === 'Session' && t.sessionDuration !== undefined && (
+                  <p className="font-mono text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                    <Clock className="w-3 h-3 text-[#00f3ff]" />
+                    <span>Played: <strong className="text-[#00f3ff]">{t.sessionDuration} mins</strong></span>
+                    {t.sessionStartTime && t.sessionEndTime && (
+                      <>
+                        <span className="text-gray-700">|</span>
+                        <span>{new Date(t.sessionStartTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(t.sessionEndTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      </>
+                    )}
+                  </p>
+                )}
               </div>
               <div className="text-right">
                 {t.amountCash > 0 && <p className="text-[#00ff55] font-mono text-sm font-bold">+₹{t.amountCash}</p>}
@@ -297,8 +418,6 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
           ))}
         </div>
       </div>
-
-
 
       {/* ─── +15 Confirm ─── */}
       <ConfirmModal
@@ -314,7 +433,6 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
       {/* ─── Allot Modal ─── */}
       <Modal open={allotModal.open} onClose={() => setAllotModal({ open: false, station: null })} title={`ALLOT · ${allotModal.station?.name || ''}`} borderColor="#00ff55">
         <div className="space-y-4 font-mono">
-          {/* Walk-in vs Member toggle */}
           <div className="flex bg-[#0f1026] rounded border border-gray-700 p-1">
             {(['walkin', 'member'] as const).map(t => (
               <button key={t} onClick={() => { setAllotType(t); setSelectedMember(null); setMemberSearch(''); }}
@@ -324,7 +442,6 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
             ))}
           </div>
 
-          {/* VIP search */}
           {allotType === 'member' && (
             <div>
               <label className="block text-[#ffea00] text-xs mb-1">SEARCH MEMBER</label>
@@ -401,25 +518,149 @@ export function DashboardClient({ stations, members, plans, recentTxns, todaysRe
                 </div>
               </>
             )}
+
+            {/* List ordered session addons */}
+            {currentSessionAddons.length > 0 && (
+              <div className="p-3 bg-[#0f1026] border border-[#00f3ff]/30 rounded space-y-2">
+                <p className="text-[10px] text-[#00f3ff] uppercase font-bold tracking-wider flex items-center gap-1">
+                  <CupSoda className="w-3.5 h-3.5" /> ADDONS ORDERED
+                </p>
+                <div className="divide-y divide-gray-800/50 max-h-36 overflow-y-auto pr-1">
+                  {currentSessionAddons.map((item) => (
+                    <div key={item.id} className="py-1.5 flex justify-between text-xs font-mono">
+                      <span className="text-gray-300">{item.name} <span className="text-gray-600">x{item.quantity}</span></span>
+                      <span className="text-[#00ff55]">₹{item.priceAtPurchase * item.quantity}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-2 border-t border-gray-800/80 flex justify-between text-xs font-mono font-bold">
+                  <span className="text-gray-400">ADDONS TOTAL</span>
+                  <span className="text-[#00ff55]">₹{totalAddonsPrice}</span>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 bg-[#0f1026] border border-gray-700 rounded">
-                <p className="text-gray-400 text-xs mb-1">TOTAL TIME</p>
+                <p className="text-gray-400 text-xs mb-1">PLAY TIME</p>
                 <p className="text-xl font-pixel text-white">{checkoutModal.station.session.durationMinutes}m</p>
               </div>
               <div className="p-3 bg-[#0f1026] border border-[#ff00ea]/40 rounded">
                 <p className="text-[#ff00ea] text-xs mb-1">FINAL BILL</p>
-                {checkoutModal.station.session.totalPrice === 0
-                  ? <p className="text-xl font-pixel text-[#ffea00]">{Math.ceil((checkoutModal.station.session.durationMinutes - 4) / 15)} COINS</p>
-                  : <p className="text-xl font-pixel text-[#00ff55]">₹{Math.round(((checkoutModal.station.session.durationMinutes - 4) / 60) * checkoutModal.station.ratePerHour)}</p>
-                }
+                {checkoutModal.station.session.totalPrice === 0 ? (
+                  <div className="space-y-1">
+                    <p className="text-xl font-pixel text-[#ffea00]">{Math.ceil(checkoutModal.station.session.durationMinutes / 15)} COINS</p>
+                    {totalAddonsPrice > 0 && <p className="text-[10px] text-gray-400 font-mono">+ ₹{totalAddonsPrice} Addons</p>}
+                  </div>
+                ) : (
+                  <p className="text-xl font-pixel text-[#00ff55]">
+                    ₹{Math.round((checkoutModal.station.session.durationMinutes / 60) * checkoutModal.station.ratePerHour) + totalAddonsPrice}
+                  </p>
+                )}
               </div>
             </div>
+
             <div className="flex gap-3">
-              <Button onClick={() => setCheckoutModal({ open: false, station: null })} variant="outline" className="flex-1 border-gray-700 text-gray-400">CANCEL</Button>
-              <Button onClick={handleCheckout} className="flex-1 bg-[#ff00ea] hover:bg-[#cc00bb] text-white font-pixel text-xs border-none">PAYMENT RECEIVED</Button>
+              <Button onClick={() => setCheckoutModal({ open: false, station: null })} variant="outline" className="flex-1 border-gray-700 text-gray-400" disabled={checkoutLoading}>CANCEL</Button>
+              <Button onClick={handleCheckout} className="flex-1 bg-[#ff00ea] hover:bg-[#cc00bb] text-white font-pixel text-xs border-none" disabled={checkoutLoading}>
+                {checkoutLoading ? 'PROCESSING...' : 'PAYMENT RECEIVED'}
+              </Button>
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* ─── Station Addons Modal ─── */}
+      <Modal 
+        open={stationAddonsModal.open} 
+        onClose={() => setStationAddonsModal({ open: false, station: null })} 
+        title={`ADDONS · ${stationAddonsModal.station?.name || ''}`} 
+        borderColor="#00f3ff"
+      >
+        <div className="space-y-4 font-mono">
+          <p className="text-gray-500 text-xs">Manage active snack & drink orders for this session.</p>
+
+          {/* Add new addon section */}
+          <div className="p-3 bg-[#0f1026] border border-gray-700 rounded space-y-3">
+            <p className="text-[#00f3ff] text-xs font-bold uppercase">ORDER NEW ADDON</p>
+            <div className="flex gap-2">
+              <select 
+                value={selectedAddonId} 
+                onChange={e => setSelectedAddonId(e.target.value)}
+                className="flex-1 bg-[#0a0a1a] border border-gray-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#00f3ff]"
+              >
+                <option value="">Select addon...</option>
+                {addons.map((a: any) => (
+                  <option key={a.id} value={a.id}>{a.name} (₹{a.price})</option>
+                ))}
+              </select>
+              <div className="flex gap-2 shrink-0">
+                <Input 
+                  type="number" 
+                  min="1"
+                  value={addonQuantity} 
+                  onChange={e => setAddonQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-14 bg-[#0a0a1a] border-gray-700 text-white text-xs h-auto py-1" 
+                />
+                <Button 
+                  onClick={handleAddAddon}
+                  disabled={addonsLoading || !selectedAddonId}
+                  className="bg-[#00f3ff] hover:bg-[#00ccdd] text-black font-pixel text-[10px] px-3 shrink-0 h-auto py-1.5 border-none"
+                >
+                  ADD
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* List of currently ordered addons */}
+          <div className="space-y-2">
+            <p className="text-gray-400 text-xs font-bold uppercase">CURRENT ORDERED ITEMS</p>
+            {addonsLoading ? (
+              <p className="text-xs text-gray-500 animate-pulse text-center py-4">Loading addons...</p>
+            ) : currentSessionAddons.length === 0 ? (
+              <p className="text-xs text-gray-600 text-center py-4 bg-[#0f1026]/30 border border-gray-800 rounded">No addons added to this session.</p>
+            ) : (
+              <div className="border border-gray-800 rounded divide-y divide-gray-800 overflow-hidden max-h-48 overflow-y-auto">
+                {currentSessionAddons.map(item => (
+                  <div key={item.id} className="p-3 bg-[#0a0a1a] flex justify-between items-center text-xs">
+                    <div>
+                      <p className="text-white font-bold">{item.name}</p>
+                      <p className="text-gray-500 font-mono text-[10px]">
+                        Qty: {item.quantity} · Price: ₹{item.priceAtPurchase} each
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#00ff55] font-bold">₹{item.priceAtPurchase * item.quantity}</span>
+                      <button 
+                        onClick={() => handleRemoveAddon(item.id)}
+                        disabled={addonsLoading}
+                        className="p-1.5 text-red-500 hover:bg-red-500/10 rounded transition-colors"
+                        title="Remove item"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {currentSessionAddons.length > 0 && (
+            <div className="flex justify-between items-center p-3 bg-[#0f1026] border border-gray-850 rounded">
+              <span className="text-gray-400 text-xs font-bold">TOTAL ADDONS BILL</span>
+              <span className="text-[#00ff55] font-pixel text-sm">₹{totalAddonsPrice}</span>
+            </div>
+          )}
+
+          <Button 
+            onClick={() => setStationAddonsModal({ open: false, station: null })} 
+            className="w-full bg-gray-800 hover:bg-gray-700 text-white font-pixel text-xs py-3.5 border-none"
+          >
+            CLOSE
+          </Button>
+        </div>
       </Modal>
     </main>
   );

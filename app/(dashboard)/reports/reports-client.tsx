@@ -91,6 +91,21 @@ function DatePicker({ value, onChange, label }: { value: string; onChange: (v: s
   );
 }
 
+const formatPlayedDuration = (mins: number | null | undefined) => {
+  if (mins === null || mins === undefined) return '-';
+  if (mins < 60) return `${mins} mins`;
+  const hrs = Math.floor(mins / 60);
+  const remainingMins = mins % 60;
+  return remainingMins > 0 ? `${hrs} hr ${remainingMins}m` : `${hrs} ${hrs === 1 ? 'hr' : 'hrs'}`;
+};
+
+const formatPeriod = (start: string | Date | null | undefined, end: string | Date | null | undefined) => {
+  if (!start || !end) return '-';
+  const s = new Date(start).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+  const e = new Date(end).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+  return `${s} - ${e}`;
+};
+
 export function ReportsClient({ transactions }: { transactions: any[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -234,7 +249,7 @@ export function ReportsClient({ transactions }: { transactions: any[] }) {
           <table className="w-full text-left font-mono text-sm">
             <thead className="bg-[#0f1026] text-gray-500 text-xs">
               <tr>
-                {['TXN ID','DATE & TIME','USER DETAILS','TYPE','CASH (₹)','T8 COINS'].map(h => (
+                {['TXN ID','DATE & TIME','USER DETAILS','TYPE','PLAYED TIME','SESSION PERIOD','CASH (₹)','T8 COINS'].map(h => (
                   <th key={h} className="p-4 border-b border-gray-800">{h}</th>
                 ))}
               </tr>
@@ -265,11 +280,13 @@ export function ReportsClient({ transactions }: { transactions: any[] }) {
                     )}
                   </td>
                   <td className="p-4"><span className="px-2 py-0.5 bg-gray-800 rounded text-xs uppercase">{txn.transactionType}</span></td>
+                  <td className="p-4 text-gray-300 font-bold">{formatPlayedDuration(txn.sessionDuration)}</td>
+                  <td className="p-4 text-gray-400 text-xs">{formatPeriod(txn.sessionStartTime, txn.sessionEndTime)}</td>
                   <td className="p-4 text-[#00ff55] font-bold">{txn.amountCash > 0 ? `+${txn.amountCash}` : '-'}</td>
                   <td className="p-4 text-[#ffea00] font-bold">{txn.amountCreditsUsed > 0 ? `-${txn.amountCreditsUsed}` : '-'}</td>
                 </tr>
               )) : (
-                <tr><td colSpan={6} className="p-8 text-center text-gray-600">No transactions found.</td></tr>
+                <tr><td colSpan={8} className="p-8 text-center text-gray-600">No transactions found.</td></tr>
               )}
             </tbody>
           </table>

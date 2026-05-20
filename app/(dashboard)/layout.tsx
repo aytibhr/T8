@@ -9,7 +9,7 @@ import { User } from '@/lib/db/schema';
 import useSWR, { mutate } from 'swr';
 import Image from 'next/image';
 import {
-  Bell, LogOut, Settings, Home, Monitor, LineChart, Crown, X, Trash2, Menu, User as UserIcon, MessageSquare
+  Bell, LogOut, Settings, Home, Monitor, LineChart, Crown, X, Trash2, Menu, User as UserIcon, MessageSquare, CupSoda
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -232,6 +232,7 @@ function Header() {
               { href: '/stations', label: 'Stations' },
               { href: '/reports', label: 'Reports' },
               { href: '/memberships', label: 'Memberships', highlight: true },
+              { href: '/addons', label: 'Addons' },
               { href: '/leaderboard', label: 'Leaderboard' },
             ].map(item => (
               <Link

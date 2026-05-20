@@ -226,3 +226,26 @@ export const leaderboard = pgTable('leaderboard', {
 export type LeaderboardEntry = typeof leaderboard.$inferSelect;
 export type NewLeaderboardEntry = typeof leaderboard.$inferInsert;
 
+export const addons = pgTable('addons', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  price: integer('price').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const sessionAddons = pgTable('session_addons', {
+  id: serial('id').primaryKey(),
+  sessionId: integer('session_id').notNull().references(() => sessions.id),
+  addonId: integer('addon_id').notNull().references(() => addons.id),
+  quantity: integer('quantity').notNull().default(1),
+  priceAtPurchase: integer('price_at_purchase').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export type Addon = typeof addons.$inferSelect;
+export type NewAddon = typeof addons.$inferInsert;
+export type SessionAddon = typeof sessionAddons.$inferSelect;
+export type NewSessionAddon = typeof sessionAddons.$inferInsert;
+
+
