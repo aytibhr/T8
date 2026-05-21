@@ -219,6 +219,7 @@ function BottomNav() {
 }
 
 function Header() {
+  const pathname = usePathname();
   return (
     <header className="border-b border-gray-800 bg-[#0a0a1a]/80 backdrop-blur-md sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
@@ -234,19 +235,24 @@ function Header() {
               { href: '/memberships', label: 'Memberships', highlight: true },
               { href: '/addons', label: 'Addons' },
               { href: '/leaderboard', label: 'Leaderboard' },
-            ].map(item => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  item.highlight
-                    ? 'text-[#ffea00] hover:bg-[#ffea00]/10'
-                    : 'text-gray-300 hover:text-[#00f3ff] hover:bg-[#00f3ff]/10'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            ].map(item => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 border ${
+                    isActive
+                      ? item.highlight
+                        ? 'text-[#ffea00] bg-[#ffea00]/15 border-[#ffea00]/40 shadow-[0_0_15px_rgba(255,234,0,0.2)] font-bold'
+                        : 'text-[#00f3ff] bg-[#00f3ff]/15 border-[#00f3ff]/40 shadow-[0_0_15px_rgba(0,243,255,0.2)] font-bold'
+                      : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
         <div className="flex items-center space-x-1 md:space-x-2">
