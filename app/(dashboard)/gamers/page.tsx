@@ -11,7 +11,7 @@ export default async function GamersPage() {
     .select({
       id: sessions.id,
       durationMinutes: sessions.durationMinutes,
-      userPhone: sessions.userPhone,
+      userPhone: transactions.userPhone,
       customerName: transactions.customerName,
       stationName: stations.name,
       stationType: stations.type,

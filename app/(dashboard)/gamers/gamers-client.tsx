@@ -36,9 +36,19 @@ export function GamersClient({ completedSessions, sessionAddons }: GamersClientP
 
     // 1. Group completed sessions by phone number
     completedSessions.forEach(session => {
-      // Group by phone. If none, fallback to 'Walk-In'.
-      const phone = session.userPhone || 'Walk-In';
+      const phone = (session.userPhone || '').trim();
       const name = session.customerName || 'Gamer';
+
+      // A valid gamer must have a valid phone number
+      const isValidPhone = phone && 
+                           phone.toLowerCase() !== 'walk-in' && 
+                           phone.toLowerCase() !== 'n/a' && 
+                           phone.toLowerCase() !== 'guest' && 
+                           /\d+/.test(phone);
+
+      if (!isValidPhone) {
+        return; // skip anonymous guest sessions
+      }
 
       if (!gamersMap.has(phone)) {
         gamersMap.set(phone, {
@@ -72,10 +82,17 @@ export function GamersClient({ completedSessions, sessionAddons }: GamersClientP
     sessionAddons.forEach(addon => {
       const session = completedSessions.find(s => s.id === addon.sessionId);
       if (session) {
-        const phone = session.userPhone || 'Walk-In';
-        const gamer = gamersMap.get(phone);
-        if (gamer && addon.addonName) {
-          gamer.addonCounts[addon.addonName] = (gamer.addonCounts[addon.addonName] || 0) + (addon.quantity || 0);
+        const phone = (session.userPhone || '').trim();
+        const isValidPhone = phone && 
+                             phone.toLowerCase() !== 'walk-in' && 
+                             phone.toLowerCase() !== 'n/a' && 
+                             phone.toLowerCase() !== 'guest' && 
+                             /\d+/.test(phone);
+        if (isValidPhone) {
+          const gamer = gamersMap.get(phone);
+          if (gamer && addon.addonName) {
+            gamer.addonCounts[addon.addonName] = (gamer.addonCounts[addon.addonName] || 0) + (addon.quantity || 0);
+          }
         }
       }
     });

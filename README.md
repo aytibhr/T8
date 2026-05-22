@@ -1,123 +1,95 @@
-# Next.js SaaS Starter
+# 🎮 Terminal 8 - Premium Gaming Hub Administration Console
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+Terminal 8 is a state-of-the-art, high-performance, dark cyber-neon themed SaaS administration platform custom-designed for modern gaming lounges. It handles real-time station allotments, dynamic checkout pricing, snack/refreshment active order integrations, user membership credit ledgers, and lifetime gamer analytics.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+---
 
-## Features
+## 🚀 Key Modules & Custom Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Pricing page (`/pricing`) which connects to Stripe Checkout
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
-- Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+### 1. Dynamic Command Center & Station Grid
+* **Live Station Tiles**: Displays live countdown timers, station status (Active, Occupied, Maintenance), and active session time bounds (with smooth 15-minute low-time glowing alerts).
+* **Calibration Setup Time Allotment**: Supports setting a custom, non-billed setup duration (e.g. 4 minutes) during walk-in or membership allotments, separate from charged playtime.
+* **Console Support**: Standardized station categories including **PS5 Single**, **PS5 Multiplayer**, **Car Simulators** (priced at ₹250/hr), and **Billiards**.
+* **Quick Extend (+15 Mins)**: One-click visual confirm modal to instantly extend any occupied station session.
 
-## Tech Stack
+### 2. Consolidated Snack & Addon Inventory (`/addons`)
+* **Addon Catalog**: Premium dark cyber-neon catalog management panel enabling complete CRUD operations (Create, Read, Update, Delete) on custom snacks, drinks, and ice creams.
+* **Active Station Addon Drawer**: Glowing cyan drink button on active occupied cards, allowing operators to order new snacks with customized quantities or remove active item orders in real-time.
+* **Unified Checkout Integration**: All active session addons are dynamically fetched, itemized, and consolidated into the final checkout bill.
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
-- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+### 3. Smart Checkout & Flexible Billing
+* **Idempotency Checkout Guard**: Implemented database-level validation to prevent rapid double-clicks from generating duplicate checkout transactions.
+* **Flexible Cash Override**: Allows operators to manually modify the final total cash collected at checkout, introducing custom reductions or goodwill discounts.
+* **VIP Member Splits**: Automatically separates VIP station play deductions (charged in **T8 Coins** based on 15-minute intervals) from snack/drink addon balances (settled strictly in cash).
 
-## Getting Started
+### 4. Interactive Leaderboard Panel (`/leaderboard`)
+* **Cyberpunk Standings**: Highly detailed competitive gamer standings showcasing rank, gamer tag, game title, console platform, rank tiers, and visual XP score boards.
 
+### 5. Detailed Transaction Ledgers & Reports (`/reports`)
+* **Dynamic Report Popups**: Embedded a premium view (`Eye` icon button) trigger next to all entries in the Financial Ledger.
+* **Interactive Breakdown sheet**: Displays precise calibration setup duration vs charged playtime, complete itemized order summaries for addons, auto-calculated expected billing vs final cash received, and a distinct glowing reduction/discount override indicator.
+
+### 6. Identified Gamers Analytics Directory (`/gamers`)
+* **Data Integrity & Analytics Accuracy**: Employs strict, multi-layer validation (ignoring anonymous placeholders like 'Walk-In', 'GUEST', 'N/A', or phone numbers without digits) to prevent guest traffic or unauthenticated checkout sessions from corrupting authentic player stats.
+* **Unique Gamer Profiles**: Joins and aggregates completed sessions using validated phone numbers directly from checkout transactions, ensuring perfect profile tracking with zero data spillover.
+* **Lifetime Metrics Card**: Computes and displays:
+  * **Total Sessions**: Total count of completed lounge visits.
+  * **Playtime Hours**: Cumulative play duration (formatted to 1 decimal place).
+  * **Favourite Station**: The console/playground used most frequently.
+  * **Favourite Refreshment**: The snack or drink ordered with the highest cumulative quantity.
+* **Live Search & Sorting**: Supports fast query lookups (by name or phone number) and sorting toggles (by total sessions, playtime hours, or alphabetical gamer names).
+
+### 7. Responsive Navigation & Mobile Support
+* **Mobile Hamburger Navigation Dropdown**: Embedded a floating glowing hamburger trigger inside the sticky header on mobile viewports (`md:hidden`), revealing all routes dynamically (*Dashboard*, *Stations*, *Reports*, *Memberships*, *Addons*, *Leaderboard*, *Gamers*) to guarantee 100% route accessibility.
+
+---
+
+## 🛠️ Technical Stack & Tooling
+
+* **Frontend Framework**: [Next.js 15 (App Router)](https://nextjs.org/) utilizing dynamic rendering and React Server Components.
+* **Style System**: Vanilla [Tailwind CSS](https://tailwindcss.com/) with a curated cyber-neon design palette, high-glares, custom monospaced layout panels, and premium micro-animations.
+* **Database Engine**: Live [Supabase PostgreSQL](https://supabase.com/) hosting real-time tables.
+* **ORM Layer**: [Drizzle ORM](https://orm.drizzle.team/) mapping types, relational schemas, and handling transactions/aggregations.
+* **State & Data Fetching**: [SWR](https://swr.vercel.app/) and Server Actions for lightweight dynamic updates.
+
+---
+
+## 📦 Getting Started
+
+### 1. Installation
+Clone the repository and install all dependencies:
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
-pnpm install
+git clone https://github.com/aytibhr/terminal.git
+cd terminal
+npm install
 ```
 
-## Running Locally
-
-[Install](https://docs.stripe.com/stripe-cli) and log in to your Stripe account:
-
-```bash
-stripe login
+### 2. Environment Variables
+Configure your live database connection inside a `.env` file at the project root:
+```env
+POSTGRES_URL="your-supabase-connection-string"
+AUTH_SECRET="your-next-auth-secret"
 ```
 
-Use the included setup script to create your `.env` file:
-
+### 3. Seed Database
+Seed the database with default parameters and station settings:
 ```bash
-pnpm db:setup
+npm run db:push
+npm run db:seed
 ```
 
-Run the database migrations and seed the database with a default user and team:
-
+### 4. Running Development Server
+Launch the local development environment:
 ```bash
-pnpm db:migrate
-pnpm db:seed
+npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3050) in your web browser.
 
-This will create the following user and team:
+---
 
-- User: `test@test.com`
-- Password: `admin123`
-
-You can also create new users through the `/sign-up` route.
-
-Finally, run the Next.js development server:
-
+## 🚀 Production Deployment
+Build the optimized production bundles:
 ```bash
-pnpm dev
+npm run build
+npm start
 ```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
-
-You can listen for Stripe webhooks locally through their CLI to handle subscription change events:
-
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-```
-
-## Testing Payments
-
-To test Stripe payments, use the following test card details:
-
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
-
-## Going to Production
-
-When you're ready to deploy your SaaS application to production, follow these steps:
-
-### Set up a production Stripe webhook
-
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
-
-### Deploy to Vercel
-
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
-
-### Add environment variables
-
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
-
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
-- https://zerotoshipped.com
-- https://turbostarter.dev
-
-# Build Trigger: Sat May 16 15:46:02 IST 2026
-
-# Production Deployment: Sat May 16 16:30:56 IST 2026
